@@ -42,13 +42,26 @@
                         <img class="comments__last_img" src="ImgForCommentSystem/heartInCircle.svg" alt="*">
                     </div>
                 </div>
-                
-            </section>
+                <div class="comments__insert">
+                    <div class="comments__insert-photo"> <img src="ImgForCommentSystem/profileExample.jpg" alt="*">
+                    </div>
+                    <div class="comments__insert-area">
+                        <div class="comments__insert_span_block">
+                            <span class="comments__insert-span1">Максим Авдеенко</span>
+                            <span class="comments__insert-span2">Макс. 1000 символов</span>
+                        </div>
+                        <textarea name="comment" id="comment" placeholder="Введите текст сообщения..."
+                            onInput="tArea.currentCondition(this)"></textarea>
+                    </div>
+                    <button class="comments__insert-send">Отправить</button>
+                </div>
+        </div>
+        </section>
         </div>
     </main>
     <footer class="footer">
     </footer>
-    <script src="commentSystem.js" type=" module"></script>
+    <script src="commentSystem.js"></script>
 </body>
 
 </html>
