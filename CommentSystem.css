@@ -128,6 +128,12 @@
     margin-left: 375px;
 }
 
+.comments__insert-additional{
+    font-style: italic;
+    font-size: 14px;
+    color: #FF0000;
+    margin-bottom: 33px;
+}
 
 .comments__insert-area {
     width: 688px;
@@ -164,13 +170,13 @@
     border: none;
     cursor: pointer;
     border-radius: 5px;
-    margin-top: 33px;
     height: 62px;
     min-width: 213px;
     background-color: #A1A1A1;
     color: #00000060;
     font-family: 'Inter';
     font-size: 18px;
+    box-sizing: border-box;
 }
 
 .comments__insert-photo img {
