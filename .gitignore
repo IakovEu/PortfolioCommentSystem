@@ -1,2 +1,4 @@
 node_modules/
 CommentSystem.js
+Comment.js
+TArea.js

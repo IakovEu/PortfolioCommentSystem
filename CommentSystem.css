@@ -71,7 +71,9 @@
     color: #00000060;
 }
 
-.top-btn:hover {
+.top-btn:hover,
+.publishCom__bottom-response button:hover,
+.publishCom__bottom-favorites button:hover {
     color: #000000;
 }
 
@@ -249,7 +251,7 @@
 
 .publishCom__bottom-response p,
 .publishCom__bottom-favorites p {
-margin-left: 10px;
+    margin-left: 10px;
 }
 
 .publishCom__bottom-estimate {
@@ -258,7 +260,7 @@ margin-left: 10px;
     gap: 10px;
 }
 
-.publishCom__bottom-estimate button{
+.publishCom__bottom-estimate button {
     padding: 0;
     font-family: 'Inter';
     font-size: 18px;
@@ -270,10 +272,27 @@ margin-left: 10px;
     color: #FF0000;
 }
 
-.publishCom__bottom-estimate button:last-child{
+.publishCom__bottom-estimate button:last-child {
     color: #8AC540;
 }
 
-.publishCom__bottom-estimate p{
+.publishCom__bottom-estimate p {
     margin-top: 3px;
+}
+
+.currentPhoto {
+    height: 61px;
+    border-right: solid 30.5px #00000060;
+    border-left: solid 30.5px #122AC0;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
