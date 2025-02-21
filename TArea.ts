@@ -1,32 +1,10 @@
 export class TArea {
-	// 	// Я захотел сделать счетчик для комментов в самом локал сторейдж, вместо localStorage.length, чтобы потом вычислить,
-	// 	// сколько комментов, а сколько ответов на них, тк они все храняться в одном месте
-	counter = 0;
-	// Регулировка высоты, цвет кнопки, счетчик символов и добавление надписи (функция вставлена в html, тут вызова не будет)
-	currentCondition(elem) {
-		console.log(elem);
-
-		this.changeHeight(elem);
-		if (elem.value.length > 0 && elem.value.length <= 1000) {
-			this.addToLong(elem);
-			this.btnColor(elem);
-			this.symbolCounter(elem);
-		} else if (elem.value.length > 1000) {
-			this.addToLong(elem);
-			this.btnColor();
-			this.symbolCounter(elem);
-		} else {
-			this.addToLong(elem);
-			this.btnColor();
-			this.symbolCounter();
-		}
-	}
-	// 	//Изменение высоты (сделать приватным)
+	//Изменение высоты
 	changeHeight(el) {
 		el.style.height = '62px';
 		el.style.height = `${el.scrollHeight}px`;
 	}
-	// Цвет кнопки (сделать приватным)
+	// Цвет кнопки 
 	btnColor(el = 0) {
 		if (el) {
 			document.querySelector('.comments__insert-send').style =
@@ -36,7 +14,7 @@ export class TArea {
 				'color: #00000060; background-color: #A1A1A1';
 		}
 	}
-	// Счетчик символов (сделать приватным)
+	// Счетчик символов 
 	symbolCounter(el = 0) {
 		if (el) {
 			document.querySelector(
@@ -47,7 +25,7 @@ export class TArea {
 				'Макс. 1000 символов';
 		}
 	}
-	// Добавить/убрать 'Слишком длинное сообщение' (сделать приватным)
+	// Добавить/убрать 'Слишком длинное сообщение' 
 	addToLong(el = 0) {
 		document.querySelector('.comments__insert-additional').innerHTML = '';
 		if (el.value.length > 1000) {
@@ -61,6 +39,9 @@ export class TArea {
 				'color: #00000060';
 		}
 	}
+	// Я захотел сделать счетчик для комментов в самом локал сторейдж, вместо localStorage.length, чтобы потом вычислить,
+	// сколько комментов, а сколько ответов на них, тк они все храняться в одном месте
+	counter = 0;
 	// Обновление счетчика и сохранение в локал сторейдж
 	saveToLocal() {
 		this.updateCounter();
