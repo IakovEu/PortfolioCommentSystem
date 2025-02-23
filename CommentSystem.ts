@@ -3,14 +3,17 @@ import { Comment } from './Comment.js';
 
 const tArea = new TArea();
 const comment = new Comment();
-const area = document.querySelector('#comment');
 
-// Обновление комментариев и их количества
+const area: HTMLTextAreaElement = document.querySelector('#comment');
+const btnSend: HTMLButtonElement = document.querySelector('.comments__insert-send');
+
+// Обновление комментариев их количества и автора
+tArea.CurrentPerson();
 tArea.updateComAmount();
 comment.updateCom();
 
 // // Регулировка высоты, цвет кнопки, счетчик символов и добавление надписи
-document.querySelector('#comment').addEventListener('input', function () {
+area.addEventListener('input', function () {
 	tArea.changeHeight(area);
 
 	if (area.value.length > 0 && area.value.length <= 1000) {
@@ -29,18 +32,16 @@ document.querySelector('#comment').addEventListener('input', function () {
 });
 
 // Отправка комментария
-document
-	.querySelector('.comments__insert-send')
-	.addEventListener('click', function () {
-		if (area.value.length > 0 && area.value.length <= 1000) {
-			tArea.saveToLocal();
-			tArea.updateComAmount();
-			area.value = '';
-			area.style.height = '62px';
-			document.querySelector('.comments__insert-send').style =
-				'color: #00000060; background-color: #A1A1A1';
-			document.querySelector('.comments__insert-span2').innerHTML =
-				'Макс. 1000 символов';
-			comment.publishCom();
-		}
-	});
+btnSend.addEventListener('click', function (): void {
+	if (area.value.length > 0 && area.value.length <= 1000) {
+		tArea.saveToLocal();
+		tArea.updateComAmount();
+		area.value = '';
+		area.style.height = '62px';
+		btnSend.style = 'color: #00000060; background-color: #A1A1A1';
+		document.querySelector(
+			'.comments__insert-span2'
+		).innerHTML = 'Макс. 1000 символов';
+		comment.publishCom();
+	}
+});

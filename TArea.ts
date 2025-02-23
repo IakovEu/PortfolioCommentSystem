@@ -1,11 +1,11 @@
 export class TArea {
 	//Изменение высоты
-	changeHeight(el) {
+	public changeHeight(el: HTMLTextAreaElement): void {
 		el.style.height = '62px';
 		el.style.height = `${el.scrollHeight}px`;
 	}
-	// Цвет кнопки 
-	btnColor(el = 0) {
+	// Цвет кнопки
+	public btnColor(el?: HTMLTextAreaElement): void {
 		if (el) {
 			document.querySelector('.comments__insert-send').style =
 				'color: #000000; background-color: #ABD873';
@@ -14,8 +14,8 @@ export class TArea {
 				'color: #00000060; background-color: #A1A1A1';
 		}
 	}
-	// Счетчик символов 
-	symbolCounter(el = 0) {
+	// Счетчик символов
+	public symbolCounter(el?: HTMLTextAreaElement): void {
 		if (el) {
 			document.querySelector(
 				'.comments__insert-span2'
@@ -25,8 +25,8 @@ export class TArea {
 				'Макс. 1000 символов';
 		}
 	}
-	// Добавить/убрать 'Слишком длинное сообщение' 
-	addToLong(el = 0) {
+	// Добавить/убрать 'Слишком длинное сообщение'
+	public addToLong(el?: HTMLTextAreaElement): void {
 		document.querySelector('.comments__insert-additional').innerHTML = '';
 		if (el.value.length > 1000) {
 			document
@@ -41,34 +41,33 @@ export class TArea {
 	}
 	// Я захотел сделать счетчик для комментов в самом локал сторейдж, вместо localStorage.length, чтобы потом вычислить,
 	// сколько комментов, а сколько ответов на них, тк они все храняться в одном месте
-	counter = 0;
+	private counter: number = 0;
 	// Обновление счетчика и сохранение в локал сторейдж
-	saveToLocal() {
+	public saveToLocal(): void {
+		const area: HTMLTextAreaElement = document.querySelector('#comment');
 		this.updateCounter();
 		if (
-			document.querySelector('#comment').value.trim() &&
-			typeof document.querySelector('#comment').value === 'string' &&
-			document.querySelector('#comment').value.length <= 1000
+			area.value.trim() &&
+			typeof area.value === 'string' &&
+			area.value.length <= 1000
 		) {
 			this.counter++;
-			localStorage.setItem(
-				`com${this.counter}`,
-				document.querySelector('#comment').value.trim()
-			);
+			localStorage.setItem(`com${this.counter}`, area.value.trim());
 		}
 	}
 	// Обновление счетчика (сделать приватным)
-	updateCounter() {
+	private updateCounter(): void {
 		if (
 			this.counter === 0 &&
 			Number(localStorage.getItem('commentsAmount')) !== 0
 		) {
 			this.counter = Number(localStorage.commentsAmount);
 		}
-		localStorage.setItem('commentsAmount', this.counter + 1);
+        const counterToStr: string = `${this.counter + 1}`
+		localStorage.setItem('commentsAmount', counterToStr);
 	}
 	// Обновление кол-ва комментариев
-	updateComAmount() {
+	public updateComAmount(): void {
 		if (Number(localStorage.getItem('commentsAmount')) !== 0) {
 			document.querySelector(
 				'.comments__amount'
@@ -78,5 +77,19 @@ export class TArea {
 				'.comments__amount'
 			).innerHTML = `(${this.counter})`;
 		}
+	}
+    	// Текущий человек 
+	CurrentPerson(): void {
+		fetch('https://randomuser.me/api/')
+			.then((response) => {
+				return response.json();
+			})
+			.then((res) => {
+				console.log(res.results[0].picture.thumbnail);
+                const firstAndLast = `${res.results[0].name.first} ${res.results[0].name.last}`
+                document.querySelector('#currentUser').innerHTML = firstAndLast;
+                document.querySelector('#currentPhoto').src = res.results[0].picture.thumbnail;
+                document.querySelector('#currentPhoto').style = 'animation: none; border: none;'
+			});
 	}
 }

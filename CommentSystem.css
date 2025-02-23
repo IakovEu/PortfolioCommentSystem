@@ -280,7 +280,7 @@
     margin-top: 3px;
 }
 
-.currentPhoto {
+#currentPhoto {
     height: 61px;
     border-right: solid 30.5px #00000060;
     border-left: solid 30.5px #122AC0;
