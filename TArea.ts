@@ -53,6 +53,14 @@ export class TArea {
 		) {
 			this.counter++;
 			localStorage.setItem(`com${this.counter}`, area.value.trim());
+			localStorage.setItem(
+				`name${this.counter}`,
+				localStorage.getItem('currentUserName')
+			);
+			localStorage.setItem(
+				`src${this.counter}`,
+				localStorage.getItem('currentUserSrc')
+			);
 		}
 	}
 	// Обновление счетчика (сделать приватным)
@@ -63,7 +71,7 @@ export class TArea {
 		) {
 			this.counter = Number(localStorage.commentsAmount);
 		}
-        const counterToStr: string = `${this.counter + 1}`
+		const counterToStr: string = `${this.counter + 1}`;
 		localStorage.setItem('commentsAmount', counterToStr);
 	}
 	// Обновление кол-ва комментариев
@@ -78,18 +86,25 @@ export class TArea {
 			).innerHTML = `(${this.counter})`;
 		}
 	}
-    	// Текущий человек 
+	// Текущий человек
 	CurrentPerson(): void {
 		fetch('https://randomuser.me/api/')
 			.then((response) => {
 				return response.json();
 			})
 			.then((res) => {
-				console.log(res.results[0].picture.thumbnail);
-                const firstAndLast = `${res.results[0].name.first} ${res.results[0].name.last}`
-                document.querySelector('#currentUser').innerHTML = firstAndLast;
-                document.querySelector('#currentPhoto').src = res.results[0].picture.thumbnail;
-                document.querySelector('#currentPhoto').style = 'animation: none; border: none;'
+				const firstAndLast = `${res.results[0].name.first} ${res.results[0].name.last}`;
+				document.querySelector<HTMLSpanElement>('#currentUser').innerHTML =
+					firstAndLast;
+				document.querySelector<HTMLImageElement>('#currentPhoto').src =
+					res.results[0].picture.thumbnail;
+				document.querySelector('#currentPhoto').style =
+					'animation: none; border: none;';
+				localStorage.setItem('currentUserName', firstAndLast);
+				localStorage.setItem(
+					'currentUserSrc',
+					res.results[0].picture.thumbnail
+				);
 			});
 	}
 }
