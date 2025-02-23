@@ -1,12 +1,6 @@
 export class Comment {
-	private top: string = `<div class="publishCom__top">
-                    <div class="comments__insert-photo">
-                    	<img src="ImgForCommentSystem/profileExample.jpg" alt="*">
-                    	<span class="comments__insert-span1">Взять из API</span>
-                	</div>
-                	<span class="publishCom__span">Дата из API 01.01.01</span>
-			</div>`;
-	private bottomBtns: string = `<div class="publishCom__bottom">
+	parentBlock: HTMLDivElement = document.querySelector('.comments__insert');
+	bottomBtns: string = `<div class="publishCom__bottom">
 						<div class="publishCom__bottom-response">
 							<button><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
 						</div>
@@ -21,16 +15,21 @@ export class Comment {
 					</div>`;
 	// Создание комментария из локал сторейдж (новые комментарии сверху)
 	public publishCom(): void {
-		const txt = localStorage.getItem(
+		const txt: string = localStorage.getItem(
 			`com${localStorage.getItem('commentsAmount')}`
 		);
-		const textBlock = `<div class="publishCom__txt">${txt}</div>`;
-		document
-			.querySelector('.comments__insert')
-			.insertAdjacentHTML(
-				'afterend',
-				`<div class="comment__created">${this.top}${textBlock}${this.bottomBtns}</div>`
-			);
+		const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
+		const top: string = `<div class="publishCom__top">
+                                <div class="comments__insert-photo">
+                                    <img src="${localStorage.getItem('currentUserSrc')}" alt="*">
+                                    <span class="comments__insert-span1">${localStorage.getItem('currentUserName')}</span>
+                                </div>
+                                <span class="publishCom__span">Дата из API 01.01.01</span>
+                            </div>`;
+		this.parentBlock.insertAdjacentHTML(
+			'afterend',
+			`<div class="comment__created">${top}${textBlock}${this.bottomBtns}</div>`
+		);
 	}
 	// Добавление комментов при перезагрузке/изначально
 	public updateCom(): void {
@@ -41,11 +40,18 @@ export class Comment {
 			for (let i = 1; i <= commentsAmount; i++) {
 				const txt: string = localStorage.getItem(`com${i}`);
 				const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
-				const parentBlock: HTMLDivElement =
-					document.querySelector('.comments__insert');
-				parentBlock.insertAdjacentHTML(
+				const userName: string = localStorage.getItem(`name${i}`);
+				const userSrc: string = localStorage.getItem(`src${i}`);
+				const top: string = `<div class="publishCom__top">
+                                        <div class="comments__insert-photo">
+                                            <img src="${userSrc}" alt="*">
+                                            <span class="comments__insert-span1">${userName}</span>
+                                        </div>
+                                        <span class="publishCom__span">Дата из API 01.01.01</span>
+                                    </div>`;
+				this.parentBlock.insertAdjacentHTML(
 					'afterend',
-					`<div class="comment__created">${this.top}${textBlock}${this.bottomBtns}</div>`
+					`<div class="comment__created">${top}${textBlock}${this.bottomBtns}</div>`
 				);
 			}
 		}
