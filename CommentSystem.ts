@@ -43,5 +43,6 @@ btnSend.addEventListener('click', function (): void {
 			'.comments__insert-span2'
 		).innerHTML = 'Макс. 1000 символов';
 		comment.publishCom();
+        comment.getDate();
 	}
 });

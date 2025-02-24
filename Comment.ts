@@ -21,10 +21,14 @@ export class Comment {
 		const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
 		const top: string = `<div class="publishCom__top">
                                 <div class="comments__insert-photo">
-                                    <img src="${localStorage.getItem('currentUserSrc')}" alt="*">
-                                    <span class="comments__insert-span1">${localStorage.getItem('currentUserName')}</span>
+                                    <img src="${localStorage.getItem(
+																			'currentUserSrc'
+																		)}" alt="*">
+                                    <span class="comments__insert-span1">${localStorage.getItem(
+																			'currentUserName'
+																		)}</span>
                                 </div>
-                                <span class="publishCom__span">Дата из API 01.01.01</span>
+                                <span class="publishCom__span">Дата и время прогружаются...</span>
                             </div>`;
 		this.parentBlock.insertAdjacentHTML(
 			'afterend',
@@ -42,12 +46,13 @@ export class Comment {
 				const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
 				const userName: string = localStorage.getItem(`name${i}`);
 				const userSrc: string = localStorage.getItem(`src${i}`);
+                const userDate: string = localStorage.getItem(`date${i}`);
 				const top: string = `<div class="publishCom__top">
                                         <div class="comments__insert-photo">
                                             <img src="${userSrc}" alt="*">
                                             <span class="comments__insert-span1">${userName}</span>
                                         </div>
-                                        <span class="publishCom__span">Дата из API 01.01.01</span>
+                                        <span class="publishCom__span">${userDate}</span>
                                     </div>`;
 				this.parentBlock.insertAdjacentHTML(
 					'afterend',
@@ -55,5 +60,27 @@ export class Comment {
 				);
 			}
 		}
+	}
+	// Дата и время для отправки комментария (хотелось побольше повзаимодействовать с API, поэтому не через timeStamp)
+    // Дата и время текущие, поэтому с другого api, но нужно обязательно подождать, пока они прогрузятсяи не писать новый, чтобы оба сохранились!
+	getDate(): void {
+		fetch(
+			'https://timeapi.io/api/timezone/coordinate?latitude=55.44&longitude=37.36'
+		)
+			.then((response) => {
+				return response.json();
+			})
+			.then((result) => {
+				const currentDate = `${result.currentLocalTime
+					.split('-')[2]
+					.slice(0, 2)}.${
+					result.currentLocalTime.split('-')[1]
+				} ${result.currentLocalTime.split('T')[1].slice(0, 5)}`;
+				document.querySelector('.publishCom__span').innerHTML = currentDate;
+				localStorage.setItem(
+					`date${localStorage.getItem('commentsAmount')}`,
+					currentDate
+				);
+			});
 	}
 }
