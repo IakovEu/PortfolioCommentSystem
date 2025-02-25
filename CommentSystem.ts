@@ -5,7 +5,9 @@ const tArea = new TArea();
 const comment = new Comment();
 
 const area: HTMLTextAreaElement = document.querySelector('#comment');
-const btnSend: HTMLButtonElement = document.querySelector('.comments__insert-send');
+const btnSend: HTMLButtonElement = document.querySelector(
+	'.comments__insert-send'
+);
 
 // Обновление комментариев их количества и автора
 tArea.CurrentPerson();
@@ -39,10 +41,9 @@ btnSend.addEventListener('click', function (): void {
 		area.value = '';
 		area.style.height = '62px';
 		btnSend.style = 'color: #00000060; background-color: #A1A1A1';
-		document.querySelector(
-			'.comments__insert-span2'
-		).innerHTML = 'Макс. 1000 символов';
+		document.querySelector('.comments__insert-span2').innerHTML =
+			'Макс. 1000 символов';
 		comment.publishCom();
-        comment.getDate();
+		comment.getDate();
 	}
 });

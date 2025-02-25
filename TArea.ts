@@ -89,10 +89,10 @@ export class TArea {
 	// Текущий человек
 	CurrentPerson(): void {
 		fetch('https://randomuser.me/api/')
-			.then((response) => {
+			.then((response): Promise<any>  => {
 				return response.json();
 			})
-			.then((res) => {
+			.then((res): void => {
 				const firstAndLast = `${res.results[0].name.first} ${res.results[0].name.last}`;
 				document.querySelector<HTMLSpanElement>('#currentUser').innerHTML =
 					firstAndLast;
