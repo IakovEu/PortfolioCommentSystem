@@ -21,6 +21,11 @@ export class Comment {
 		const txt: string = localStorage.getItem(
 			`com${localStorage.getItem('commentsAmount')}`
 		);
+		// currentRating я использую для сравнения с тем, который будет изменяться
+		localStorage.setItem(
+			`currentRating${localStorage.getItem('commentsAmount')}`,
+			'0'
+		);
 		const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
 		const top: string = `<div class="publishCom__top">
                                 <div class="comments__insert-photo">
@@ -56,6 +61,8 @@ export class Comment {
 			);
 			for (let i = 1; i <= commentsAmount; i++) {
 				let getRating = +localStorage.getItem(`rating${i}`);
+				// currentRating я использую для сравнения с тем, который будет изменяться
+				localStorage.setItem(`currentRating${i}`, `${getRating}`);
 				getRating == null ? (getRating = 0) : getRating;
 				const bottomBtns: string = `<div class="publishCom__bottom">
                                                 <div class="publishCom__bottom-response">
@@ -92,7 +99,8 @@ export class Comment {
 						+document.querySelector(`.p${i}`).textContent * -1;
 					document.querySelector(`.p${i}`).innerHTML = `${minusWithoutMinus}`;
 				} else if (document.querySelector(`.p${i}`)) {
-					document.querySelector<HTMLParagraphElement>(`.p${i}`).style = 'color:rgb(138, 197, 64)';
+					document.querySelector<HTMLParagraphElement>(`.p${i}`).style =
+						'color:rgb(138, 197, 64)';
 				}
 				this.changeRating('publishCom__plus', i, 'rgb(138, 197, 64)');
 				this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
@@ -102,35 +110,39 @@ export class Comment {
 	//Изменение рейтинга;
 	private changeRating(btn: string, ind: number, clr: string): void {
 		document.querySelector(`.${btn}`).addEventListener('click', () => {
-			const currentRating = Number(
+			let cR: number = +localStorage.getItem(`currentRating${ind}`);
+			const currentRating: number = Number(
 				document.querySelector(`.p${ind}`).textContent
 			);
-			if (
-				window.getComputedStyle(document.querySelector(`.p${ind}`)).color ===
-					clr ||
-				currentRating == 0
-			) {
-				document.querySelector(`.p${ind}`).style = `color:${clr}`;
-				document.querySelector<HTMLParagraphElement>(`.p${ind}`).innerHTML = `${
-					currentRating + 1
-				}`;
-			} else {
-				document.querySelector<HTMLParagraphElement>(`.p${ind}`).innerHTML = `${
-					currentRating - 1
-				}`;
-			}
-			if (
-				window.getComputedStyle(document.querySelector(`.p${ind}`)).color ===
-				'rgb(255, 0, 0)'
-			) {
-				const setRating: number = +document.querySelector(`.p${ind}`)
-					.textContent;
-				localStorage.setItem(`rating${ind}`, `${setRating * -1}`);
-			} else {
-				localStorage.setItem(
-					`rating${ind}`,
-					document.querySelector(`.p${ind}`).textContent
-				);
+			if (cR == currentRating || cR == currentRating * -1) {
+				if (
+					window.getComputedStyle(document.querySelector(`.p${ind}`)).color ===
+						clr ||
+					currentRating == 0
+				) {
+					document.querySelector(`.p${ind}`).style = `color:${clr}`;
+					document.querySelector<HTMLParagraphElement>(
+						`.p${ind}`
+					).innerHTML = `${currentRating + 1}`;
+				} else {
+					document.querySelector<HTMLParagraphElement>(
+						`.p${ind}`
+					).innerHTML = `${currentRating - 1}`;
+				}
+
+				if (
+					window.getComputedStyle(document.querySelector(`.p${ind}`)).color ===
+					'rgb(255, 0, 0)'
+				) {
+					const setRating: number = +document.querySelector(`.p${ind}`)
+						.textContent;
+					localStorage.setItem(`rating${ind}`, `${setRating * -1}`);
+				} else {
+					localStorage.setItem(
+						`rating${ind}`,
+						document.querySelector(`.p${ind}`).textContent
+					);
+				}
 			}
 		});
 	}
