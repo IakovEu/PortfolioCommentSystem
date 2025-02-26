@@ -59,7 +59,7 @@ export class Comment {
 			const commentsAmount: number = Number(
 				localStorage.getItem('commentsAmount')
 			);
-			for (let i = 1; i <= commentsAmount; i++) {
+			for (let i: number = 1; i <= commentsAmount; i++) {
 				let getRating = +localStorage.getItem(`rating${i}`);
 				// currentRating я использую для сравнения с тем, который будет изменяться
 				localStorage.setItem(`currentRating${i}`, `${getRating}`);
@@ -94,13 +94,14 @@ export class Comment {
 					`<div class="comment__created">${top}${textBlock}${bottomBtns}</div>`
 				);
 				if (getRating < 0 && document.querySelector(`.p${i}`)) {
-					document.querySelector(`.p${i}`).style = 'color:rgb(255, 0, 0)';
-					const minusWithoutMinus =
+					document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
+						'rgb(255, 0, 0)';
+					const minusWithoutMinus: number =
 						+document.querySelector(`.p${i}`).textContent * -1;
 					document.querySelector(`.p${i}`).innerHTML = `${minusWithoutMinus}`;
 				} else if (document.querySelector(`.p${i}`)) {
-					document.querySelector<HTMLParagraphElement>(`.p${i}`).style =
-						'color:rgb(138, 197, 64)';
+					document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
+						'rgb(138, 197, 64)';
 				}
 				this.changeRating('publishCom__plus', i, 'rgb(138, 197, 64)');
 				this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
@@ -109,7 +110,7 @@ export class Comment {
 	}
 	//Изменение рейтинга;
 	private changeRating(btn: string, ind: number, clr: string): void {
-		document.querySelector(`.${btn}`).addEventListener('click', () => {
+		document.querySelector<HTMLButtonElement>(`.${btn}`).addEventListener('click', () => {
 			let cR: number = +localStorage.getItem(`currentRating${ind}`);
 			const currentRating: number = Number(
 				document.querySelector(`.p${ind}`).textContent
@@ -120,7 +121,9 @@ export class Comment {
 						clr ||
 					currentRating == 0
 				) {
-					document.querySelector(`.p${ind}`).style = `color:${clr}`;
+					document.querySelector<HTMLParagraphElement>(
+						`.p${ind}`
+					).style.color = `${clr}`;
 					document.querySelector<HTMLParagraphElement>(
 						`.p${ind}`
 					).innerHTML = `${currentRating + 1}`;
@@ -129,13 +132,12 @@ export class Comment {
 						`.p${ind}`
 					).innerHTML = `${currentRating - 1}`;
 				}
-
 				if (
 					window.getComputedStyle(document.querySelector(`.p${ind}`)).color ===
 					'rgb(255, 0, 0)'
 				) {
 					const setRating: number = +document.querySelector(`.p${ind}`)
-						.textContent;
+						.textContent; // Она тут не случайно, с currentRating не работает
 					localStorage.setItem(`rating${ind}`, `${setRating * -1}`);
 				} else {
 					localStorage.setItem(
@@ -156,12 +158,13 @@ export class Comment {
 				return response.json();
 			})
 			.then((result): void => {
-				const currentDate = `${result.currentLocalTime
+				const currentDate: string = `${result.currentLocalTime
 					.split('-')[2]
 					.slice(0, 2)}.${
 					result.currentLocalTime.split('-')[1]
 				} ${result.currentLocalTime.split('T')[1].slice(0, 5)}`;
-				document.querySelector('.publishCom__span').innerHTML = currentDate;
+				document.querySelector<HTMLSpanElement>('.publishCom__span').innerHTML =
+					currentDate;
 				localStorage.setItem(
 					`date${localStorage.getItem('commentsAmount')}`,
 					currentDate
