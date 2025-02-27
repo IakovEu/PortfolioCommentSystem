@@ -1,11 +1,13 @@
-export class Comment {
-	parentBlock: HTMLDivElement = document.querySelector('.comments__insert');
+import { Response } from './Response.js';
 
+export class Comment {
+	response = new Response();
+	parentBlock: HTMLDivElement = document.querySelector('.comments__insert');
 	// Создание комментария из локал сторейдж (новые комментарии сверху)
 	public publishCom(): void {
 		const bottomBtns: string = `<div class="publishCom__bottom">
                                         <div class="publishCom__bottom-response">
-                                            <button><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
+                                            <button class="response"><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
                                         </div>
                                         <div class="publishCom__bottom-favorites">
                                             <button><img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p></button>
@@ -52,6 +54,7 @@ export class Comment {
 			+localStorage.getItem('commentsAmount'),
 			'rgb(255, 0, 0)'
 		);
+		this.response.answer(+localStorage.getItem('commentsAmount'));
 	}
 	// Добавление комментов при перезагрузке/изначально
 	public updateCom(): void {
@@ -59,6 +62,7 @@ export class Comment {
 			const commentsAmount: number = Number(
 				localStorage.getItem('commentsAmount')
 			);
+
 			for (let i: number = 1; i <= commentsAmount; i++) {
 				let getRating = +localStorage.getItem(`rating${i}`);
 				// currentRating я использую для сравнения с тем, который будет изменяться
@@ -66,7 +70,7 @@ export class Comment {
 				getRating == null ? (getRating = 0) : getRating;
 				const bottomBtns: string = `<div class="publishCom__bottom">
                                                 <div class="publishCom__bottom-response">
-                                                    <button><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
+                                                    <button class="response"><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
                                                 </div>
                                                 <div class="publishCom__bottom-favorites">
                                                     <button><img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p></button>
@@ -105,48 +109,51 @@ export class Comment {
 				}
 				this.changeRating('publishCom__plus', i, 'rgb(138, 197, 64)');
 				this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
+				this.response.answer(i);
 			}
 		}
 	}
 	//Изменение рейтинга;
 	private changeRating(btn: string, ind: number, clr: string): void {
-		document.querySelector<HTMLButtonElement>(`.${btn}`).addEventListener('click', () => {
-			let cR: number = +localStorage.getItem(`currentRating${ind}`);
-			const currentRating: number = Number(
-				document.querySelector(`.p${ind}`).textContent
-			);
-			if (cR == currentRating || cR == currentRating * -1) {
-				if (
-					window.getComputedStyle(document.querySelector(`.p${ind}`)).color ===
-						clr ||
-					currentRating == 0
-				) {
-					document.querySelector<HTMLParagraphElement>(
-						`.p${ind}`
-					).style.color = `${clr}`;
-					document.querySelector<HTMLParagraphElement>(
-						`.p${ind}`
-					).innerHTML = `${currentRating + 1}`;
-				} else {
-					document.querySelector<HTMLParagraphElement>(
-						`.p${ind}`
-					).innerHTML = `${currentRating - 1}`;
+		document
+			.querySelector<HTMLButtonElement>(`.${btn}`)
+			.addEventListener('click', () => {
+				let cR: number = +localStorage.getItem(`currentRating${ind}`);
+				const currentRating: number = Number(
+					document.querySelector(`.p${ind}`).textContent
+				);
+				if (cR == currentRating || cR == currentRating * -1) {
+					if (
+						window.getComputedStyle(document.querySelector(`.p${ind}`))
+							.color === clr ||
+						currentRating == 0
+					) {
+						document.querySelector<HTMLParagraphElement>(
+							`.p${ind}`
+						).style.color = `${clr}`;
+						document.querySelector<HTMLParagraphElement>(
+							`.p${ind}`
+						).innerHTML = `${currentRating + 1}`;
+					} else {
+						document.querySelector<HTMLParagraphElement>(
+							`.p${ind}`
+						).innerHTML = `${currentRating - 1}`;
+					}
+					if (
+						window.getComputedStyle(document.querySelector(`.p${ind}`))
+							.color === 'rgb(255, 0, 0)'
+					) {
+						const setRating: number = +document.querySelector(`.p${ind}`)
+							.textContent; // Она тут не случайно, с currentRating не работает
+						localStorage.setItem(`rating${ind}`, `${setRating * -1}`);
+					} else {
+						localStorage.setItem(
+							`rating${ind}`,
+							document.querySelector(`.p${ind}`).textContent
+						);
+					}
 				}
-				if (
-					window.getComputedStyle(document.querySelector(`.p${ind}`)).color ===
-					'rgb(255, 0, 0)'
-				) {
-					const setRating: number = +document.querySelector(`.p${ind}`)
-						.textContent; // Она тут не случайно, с currentRating не работает
-					localStorage.setItem(`rating${ind}`, `${setRating * -1}`);
-				} else {
-					localStorage.setItem(
-						`rating${ind}`,
-						document.querySelector(`.p${ind}`).textContent
-					);
-				}
-			}
-		});
+			});
 	}
 	// Дата и время для отправки комментария (хотелось побольше повзаимодействовать с API, поэтому не через timeStamp)
 	// Дата и время текущие, поэтому с другого api, но нужно обязательно подождать, пока они прогрузятсяи не писать новый, чтобы оба сохранились!
