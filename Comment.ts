@@ -1,115 +1,117 @@
 import { Response } from './Response.js';
-
+// Строки с тэгами не выношу в конфиг, чтобы все видеть и не путаться!
 export class Comment {
 	response = new Response();
 	parentBlock: HTMLDivElement = document.querySelector('.comments__insert');
-	// Создание комментария из локал сторейдж (новые комментарии сверху)
+	// Создание комментария (новые комментарии сверху)
 	public publishCom(): void {
-		const bottomBtns: string = `<div class="publishCom__bottom">
-                                        <div class="publishCom__bottom-response">
-                                            <button class="response"><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
-                                        </div>
-                                        <div class="publishCom__bottom-favorites">
-                                            <button><img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p></button>
-                                        </div>
-                                        <div class="publishCom__bottom-estimate">
-                                            <button class="publishCom__minus">-</button>
-                                            <p class="p${localStorage.getItem(
-																							'commentsAmount'
-																						)}">0</p>
-                                            <button class="publishCom__plus">+</button>
-                                        </div>
-                                    </div>`;
-		const txt: string = localStorage.getItem(
-			`com${localStorage.getItem('commentsAmount')}`
+		let cA: number = +localStorage.getItem('commentsAmount');
+		let cUserS: string = localStorage.getItem('currentUserSrc');
+		let cUserN: string = localStorage.getItem('currentUserName');
+
+		const btnSend: HTMLButtonElement = document.querySelector(
+			'.comments__insert-send'
 		);
-		// currentRating я использую для сравнения с тем, который будет изменяться
-		localStorage.setItem(
-			`currentRating${localStorage.getItem('commentsAmount')}`,
-			'0'
-		);
-		const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
+
 		const top: string = `<div class="publishCom__top">
                                 <div class="comments__insert-photo">
-                                    <img src="${localStorage.getItem(
-																			'currentUserSrc'
-																		)}" alt="*">
-                                    <span class="comments__insert-span1">${localStorage.getItem(
-																			'currentUserName'
-																		)}</span>
+                                    <img src="${cUserS}" alt="*">
+                                    <span class="comments__insert-span1">${cUserN}</span>
                                 </div>
                                 <span class="publishCom__span">Дата и время прогружаются...</span>
                             </div>`;
-		this.parentBlock.insertAdjacentHTML(
-			'afterend',
-			`<div class="comment__created">${top}${textBlock}${bottomBtns}</div>`
-		);
-		this.changeRating(
-			'publishCom__plus',
-			+localStorage.getItem('commentsAmount'),
-			'rgb(138, 197, 64)'
-		);
-		this.changeRating(
-			'publishCom__minus',
-			+localStorage.getItem('commentsAmount'),
-			'rgb(255, 0, 0)'
-		);
-		this.response.answer(+localStorage.getItem('commentsAmount'));
+
+		const txt: string = localStorage.getItem(`com${cA}`);
+		const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
+
+		const bottomBtns: string = `<div class="publishCom__bottom">
+										<div class="publishCom__bottom-response">
+											<button class="response"><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
+										</div>
+										<div class="publishCom__bottom-favorites">
+											<button><img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p></button>
+										</div>
+										<div class="publishCom__bottom-estimate">
+											<button class="publishCom__minus">-</button>
+											<p class="p${cA}">0</p>
+											<button class="publishCom__plus">+</button>
+										</div>
+									</div>`;
+		if (btnSend.textContent === 'Отправить') {
+			// currentRating я использую для сравнения с тем, который будет изменяться
+			localStorage.setItem(`currentRating${cA}`, '0');
+			this.parentBlock.insertAdjacentHTML(
+				'afterend',
+				`<div class="comment__created cN${cA}">${top}${textBlock}${bottomBtns}</div>`
+			);
+			this.changeRating('publishCom__plus', cA, 'rgb(138, 197, 64)');
+			this.changeRating('publishCom__minus', cA, 'rgb(255, 0, 0)');
+			this.response.renameBtn(cA);
+		} else {
+			btnSend.innerHTML = 'Отправить';
+			this.response.publishResponse(cA, top, bottomBtns);
+		}
 	}
-	// Добавление комментов при перезагрузке/изначально
+	// Добавление комментов при перезагрузке
 	public updateCom(): void {
 		if (Number(localStorage.getItem('commentsAmount')) > 0) {
-			const commentsAmount: number = Number(
-				localStorage.getItem('commentsAmount')
+			const cA: number = +localStorage.getItem('commentsAmount');
+			const btnSend: HTMLButtonElement = document.querySelector(
+				'.comments__insert-send'
 			);
-
-			for (let i: number = 1; i <= commentsAmount; i++) {
+			for (let i: number = 1; i <= cA; i++) {
 				let getRating = +localStorage.getItem(`rating${i}`);
 				// currentRating я использую для сравнения с тем, который будет изменяться
 				localStorage.setItem(`currentRating${i}`, `${getRating}`);
 				getRating == null ? (getRating = 0) : getRating;
-				const bottomBtns: string = `<div class="publishCom__bottom">
-                                                <div class="publishCom__bottom-response">
-                                                    <button class="response"><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
-                                                </div>
-                                                <div class="publishCom__bottom-favorites">
-                                                    <button><img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p></button>
-                                                </div>
-                                                <div class="publishCom__bottom-estimate">
-                                                    <button class="publishCom__minus">-</button>
-                                                    <p class="p${i}">${getRating}</p>
-                                                <button class="publishCom__plus">+</button>
-                                                </div>
-                                            </div>`;
-				const txt: string = localStorage.getItem(`com${i}`);
-				const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
+
 				const userName: string = localStorage.getItem(`name${i}`);
 				const userSrc: string = localStorage.getItem(`src${i}`);
 				const userDate: string = localStorage.getItem(`date${i}`);
 				const top: string = `<div class="publishCom__top">
-                                        <div class="comments__insert-photo">
-                                            <img src="${userSrc}" alt="*">
-                                            <span class="comments__insert-span1">${userName}</span>
-                                        </div>
-                                        <span class="publishCom__span">${userDate}</span>
-                                    </div>`;
-				this.parentBlock.insertAdjacentHTML(
-					'afterend',
-					`<div class="comment__created">${top}${textBlock}${bottomBtns}</div>`
-				);
-				if (getRating < 0 && document.querySelector(`.p${i}`)) {
-					document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
-						'rgb(255, 0, 0)';
-					const minusWithoutMinus: number =
-						+document.querySelector(`.p${i}`).textContent * -1;
-					document.querySelector(`.p${i}`).innerHTML = `${minusWithoutMinus}`;
-				} else if (document.querySelector(`.p${i}`)) {
-					document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
-						'rgb(138, 197, 64)';
-				}
-				this.changeRating('publishCom__plus', i, 'rgb(138, 197, 64)');
-				this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
-				this.response.answer(i);
+									<div class="comments__insert-photo">
+										<img src="${userSrc}" alt="*">
+										<span class="comments__insert-span1">${userName}</span>
+									</div>
+									<span class="publishCom__span">${userDate}</span>
+								</div>`;
+
+				const txt: string = localStorage.getItem(`com${i}`);
+				const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
+
+				const bottomBtns: string = `<div class="publishCom__bottom">
+											<div class="publishCom__bottom-response">
+												<button class="response"><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
+											</div>
+											<div class="publishCom__bottom-favorites">
+												<button><img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p></button>
+											</div>
+											<div class="publishCom__bottom-estimate">
+												<button class="publishCom__minus">-</button>
+												<p class="p${i}">${getRating}</p>
+											<button class="publishCom__plus">+</button>
+											</div>
+										</div>`;
+
+				
+					this.parentBlock.insertAdjacentHTML(
+						'afterend',
+						`<div class="comment__created cN${i}">${top}${textBlock}${bottomBtns}</div>`
+					);
+					if (getRating < 0 && document.querySelector(`.p${i}`)) {
+						document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
+							'rgb(255, 0, 0)';
+						const minusWithoutMinus: number =
+							+document.querySelector(`.p${i}`).textContent * -1;
+						document.querySelector(`.p${i}`).innerHTML = `${minusWithoutMinus}`;
+					} else if (document.querySelector(`.p${i}`)) {
+						document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
+							'rgb(138, 197, 64)';
+					}
+					this.changeRating('publishCom__plus', i, 'rgb(138, 197, 64)');
+					this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
+					this.response.renameBtn(i);
+					btnSend.innerHTML = 'Отправить';
 			}
 		}
 	}
@@ -157,7 +159,7 @@ export class Comment {
 	}
 	// Дата и время для отправки комментария (хотелось побольше повзаимодействовать с API, поэтому не через timeStamp)
 	// Дата и время текущие, поэтому с другого api, но нужно обязательно подождать, пока они прогрузятсяи не писать новый, чтобы оба сохранились!
-	getDate(): void {
+	public getDate(): void {
 		fetch(
 			'https://timeapi.io/api/timezone/coordinate?latitude=55.44&longitude=37.36'
 		)

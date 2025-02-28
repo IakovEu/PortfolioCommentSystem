@@ -206,7 +206,7 @@
 }
 
 /* Стили по созданным комментариям*/
-.comment__created {
+.comment__created{
     max-width: 1007px;
     margin-bottom: 50px;
 }
@@ -295,4 +295,10 @@
     to {
         transform: rotate(360deg);
     }
+}
+/* Стили по созданным ответам на комментарии*/
+
+.response__created {
+    max-width: 1007px;
+    margin:0 0 50px 91px;
 }

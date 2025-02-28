@@ -46,45 +46,53 @@ export class TArea {
 	}
 	// Для добавления информации о комментах в локал сторейдж
 	private counter: number = 0;
-	// Обновление счетчика и сохранение в локал сторейдж
+	// Для добавления информации об ответах в локал сторейдж
 	public saveToLocal(): void {
+		const btnSend: HTMLButtonElement = document.querySelector(
+			'.comments__insert-send'
+		);
 		const area: HTMLTextAreaElement = document.querySelector('#comment');
-		this.updateCounter();
-		if (
-			area.value.trim() &&
-			typeof area.value === 'string' &&
-			area.value.length <= 1000
-		) {
-			this.counter++;
-			localStorage.setItem(`com${this.counter}`, area.value.trim());
-			localStorage.setItem(
-				`name${this.counter}`,
-				localStorage.getItem('currentUserName')
-			);
-			localStorage.setItem(
-				`src${this.counter}`,
-				localStorage.getItem('currentUserSrc')
-			);
+		if (btnSend.textContent === 'Отправить') {
+			this.updateCounter();
+			if (
+				area.value.trim() &&
+				typeof area.value === 'string' &&
+				area.value.length <= 1000
+			) {
+				this.counter++;
+				localStorage.setItem(`com${this.counter}`, area.value.trim());
+				localStorage.setItem(
+					`name${this.counter}`,
+					localStorage.getItem('currentUserName')
+				);
+				localStorage.setItem(
+					`src${this.counter}`,
+					localStorage.getItem('currentUserSrc')
+				);
+			}
 		}
 	}
-	// Обновление счетчика (сделать приватным)
+	// Обновление счетчика комментариев
 	private updateCounter(): void {
-		if (
-			this.counter === 0 &&
-			Number(localStorage.getItem('commentsAmount')) !== 0
-		) {
-			this.counter = Number(localStorage.commentsAmount);
+		if (this.counter === 0 && +localStorage.getItem('commentsAmount') !== 0) {
+			this.counter = +localStorage.commentsAmount;
 		}
 		const counterToStr: string = `${this.counter + 1}`;
 		localStorage.setItem('commentsAmount', counterToStr);
 	}
 	// Обновление кол-ва комментариев
 	public updateComAmount(): void {
-		const amount: HTMLSpanElement = document.querySelector('.comments__amount');
-		if (Number(localStorage.getItem('commentsAmount')) !== 0) {
-			amount.innerHTML = `(${localStorage.getItem('commentsAmount')})`;
-		} else {
-			amount.innerHTML = `(${this.counter})`;
+		const btnSend: HTMLButtonElement = document.querySelector(
+			'.comments__insert-send'
+		);
+		if (btnSend.textContent === 'Отправить') {
+			const amount: HTMLSpanElement =
+				document.querySelector('.comments__amount');
+			if (Number(localStorage.getItem('commentsAmount')) !== 0) {
+				amount.innerHTML = `(${localStorage.getItem('commentsAmount')})`;
+			} else {
+				amount.innerHTML = `(${this.counter})`;
+			}
 		}
 	}
 	// Текущий человек
