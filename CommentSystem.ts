@@ -11,12 +11,12 @@ const btnSend: HTMLButtonElement = document.querySelector(
 	'.comments__insert-send'
 );
 
-// Обновление комментариев их количества и автора
+// Обновление комментариев их количества автора и ответов
 tArea.CurrentPerson();
 tArea.updateComAmount();
 comment.updateCom();
 
-// // Регулировка высоты, цвет кнопки, счетчик символов и добавление надписи
+// Регулировка высоты, цвет кнопки, счетчик символов и добавление надписи
 area.addEventListener('input', function () {
 	tArea.changeHeight(area);
 	if (area.value.length > 0 && area.value.length <= 1000) {
@@ -34,7 +34,7 @@ area.addEventListener('input', function () {
 	}
 });
 
-// Отправка комментария
+// Отправка комментария / ответа на комментарий
 btnSend.addEventListener('click', function (): void {
 	const x = area.value.trim();
 	if (x.length > 0 && x.length <= 1000) {
@@ -51,3 +51,6 @@ btnSend.addEventListener('click', function (): void {
 		).innerHTML = 'Макс. 1000 символов';
 	}
 });
+
+// Свободно места в LS из 10MB      (в консоль)
+// var _lsTotal=0,_xLen,_x;for(_x in localStorage){ if(!localStorage.hasOwnProperty(_x)){continue;} _xLen= ((localStorage[_x].length + _x.length)* 2);_lsTotal+=_xLen; console.log(_x.substr(0,50)+" = "+ (_xLen/1024).toFixed(2)+" KB")};console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");

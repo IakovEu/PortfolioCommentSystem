@@ -3,7 +3,7 @@ import { Response } from './Response.js';
 export class Comment {
 	response = new Response();
 	parentBlock: HTMLDivElement = document.querySelector('.comments__insert');
-	// Создание комментария (новые комментарии сверху)
+	// Создание комментария / ответа (новые сверху) 
 	public publishCom(): void {
 		let cA: number = +localStorage.getItem('commentsAmount');
 		let cUserS: string = localStorage.getItem('currentUserSrc');
@@ -42,14 +42,14 @@ export class Comment {
 			localStorage.setItem(`currentRating${cA}`, '0');
 			this.parentBlock.insertAdjacentHTML(
 				'afterend',
-				`<div class="comment__created cN${cA}">${top}${textBlock}${bottomBtns}</div>`
+				`<div class="comment__created" num="${cA}">${top}${textBlock}${bottomBtns}</div>`
 			);
 			this.changeRating('publishCom__plus', cA, 'rgb(138, 197, 64)');
 			this.changeRating('publishCom__minus', cA, 'rgb(255, 0, 0)');
 			this.response.renameBtn(cA);
 		} else {
 			btnSend.innerHTML = 'Отправить';
-			this.response.publishResponse(cA, top, bottomBtns);
+			this.response.publishResponse(top, bottomBtns);
 		}
 	}
 	// Добавление комментов при перезагрузке
@@ -93,29 +93,29 @@ export class Comment {
 											</div>
 										</div>`;
 
-				
-					this.parentBlock.insertAdjacentHTML(
-						'afterend',
-						`<div class="comment__created cN${i}">${top}${textBlock}${bottomBtns}</div>`
-					);
-					if (getRating < 0 && document.querySelector(`.p${i}`)) {
-						document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
-							'rgb(255, 0, 0)';
-						const minusWithoutMinus: number =
-							+document.querySelector(`.p${i}`).textContent * -1;
-						document.querySelector(`.p${i}`).innerHTML = `${minusWithoutMinus}`;
-					} else if (document.querySelector(`.p${i}`)) {
-						document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
-							'rgb(138, 197, 64)';
-					}
-					this.changeRating('publishCom__plus', i, 'rgb(138, 197, 64)');
-					this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
-					this.response.renameBtn(i);
-					btnSend.innerHTML = 'Отправить';
+				this.parentBlock.insertAdjacentHTML(
+					'afterend',
+					`<div class="comment__created" num="${i}">${top}${textBlock}${bottomBtns}</div>`
+				);
+				if (getRating < 0 && document.querySelector(`.p${i}`)) {
+					document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
+						'rgb(255, 0, 0)';
+					const minusWithoutMinus: number =
+						+document.querySelector(`.p${i}`).textContent * -1;
+					document.querySelector(`.p${i}`).innerHTML = `${minusWithoutMinus}`;
+				} else if (document.querySelector(`.p${i}`)) {
+					document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
+						'rgb(138, 197, 64)';
+				}
+				this.changeRating('publishCom__plus', i, 'rgb(138, 197, 64)');
+				this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
+				this.response.renameBtn(i);
+				btnSend.innerHTML = 'Отправить';
+				this.response.updateResp(i, top, bottomBtns);
 			}
 		}
 	}
-	//Изменение рейтинга;
+	//Изменение рейтинга (отрицательный-красный, положительный-зеленый);
 	private changeRating(btn: string, ind: number, clr: string): void {
 		document
 			.querySelector<HTMLButtonElement>(`.${btn}`)

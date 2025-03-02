@@ -208,7 +208,7 @@
 /* Стили по созданным комментариям*/
 .comment__created{
     max-width: 1007px;
-    margin-bottom: 50px;
+    margin:0 20px 50px 0;
 }
 
 .publishCom__top {
@@ -300,5 +300,5 @@
 
 .response__created {
     max-width: 1007px;
-    margin:0 0 50px 91px;
+    margin:0 40px 50px 91px;
 }
