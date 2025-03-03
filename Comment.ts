@@ -119,39 +119,25 @@ export class Comment {
 		document
 			.querySelector<HTMLButtonElement>(`.${btn}`)
 			.addEventListener('click', () => {
-				let cR: number = +localStorage.getItem(`currentRating${ind}`);
-				const currentRating: number = Number(
-					document.querySelector(`.p${ind}`).textContent
-				);
+				const pNum: HTMLParagraphElement = document.querySelector(`.p${ind}`);
+				const currentRating: number = +pNum.textContent;
+				const cR: number = +localStorage.getItem(`currentRating${ind}`);
+
 				if (cR == currentRating || cR == currentRating * -1) {
 					if (
-						window.getComputedStyle(document.querySelector(`.p${ind}`))
-							.color === clr ||
+						window.getComputedStyle(pNum).color === clr ||
 						currentRating == 0
 					) {
-						document.querySelector<HTMLParagraphElement>(
-							`.p${ind}`
-						).style.color = `${clr}`;
-						document.querySelector<HTMLParagraphElement>(
-							`.p${ind}`
-						).innerHTML = `${currentRating + 1}`;
+						pNum.style.color = `${clr}`;
+						pNum.innerHTML = `${currentRating + 1}`;
 					} else {
-						document.querySelector<HTMLParagraphElement>(
-							`.p${ind}`
-						).innerHTML = `${currentRating - 1}`;
+						pNum.innerHTML = `${currentRating - 1}`;
 					}
-					if (
-						window.getComputedStyle(document.querySelector(`.p${ind}`))
-							.color === 'rgb(255, 0, 0)'
-					) {
-						const setRating: number = +document.querySelector(`.p${ind}`)
-							.textContent; // Она тут не случайно, с currentRating не работает
+					if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
+						const setRating: number = +pNum.textContent; // Она тут не случайно, с currentRating не работает
 						localStorage.setItem(`rating${ind}`, `${setRating * -1}`);
 					} else {
-						localStorage.setItem(
-							`rating${ind}`,
-							document.querySelector(`.p${ind}`).textContent
-						);
+						localStorage.setItem(`rating${ind}`, pNum.textContent);
 					}
 				}
 			});

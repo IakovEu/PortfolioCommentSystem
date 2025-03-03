@@ -1,6 +1,6 @@
 // Чтобы не дублировать много строчек кода, я вызываю эти функции в классе Comment
 // Функция которая задает время вызывается позже чем эта, поэтому пришлось немного дублировать
-// Toп дублировал тк новые вводные, через slice или splice слишком много менять 
+// Toп дублировал тк новые вводные, через slice или splice слишком много менять
 export class Response {
     respCounter = 0;
     // Изменение кнопки отправки, перемещение к ней и событие на каждую кнопку ответа (нажали, написали в обычное поле ввода и ответили)
@@ -79,6 +79,7 @@ export class Response {
         const del = bot.slice(40, 225);
         const delBtn = bot.replace(del, '');
         const respInCom = localStorage.getItem(`respIn${ind}Com`);
+        const changebot = bot.slice(400, 610);
         if (+respInCom != 0) {
             respInCom.split(' ').forEach((el) => {
                 let respDate = localStorage.getItem(`respDate${el}`);
@@ -98,8 +99,13 @@ export class Response {
 									</div>
 									<span class="publishCom__span">${respDate}</span>
 								</div>`;
+                const changeEstimateDiv = `<div class="publishCom__bottom-estimate">
+												<button class="publishCom__minus resp-minus">-</button>
+												<p class="pp${el}">0</p>
+												<button class="publishCom__plus resp-plus">+</button>
+											</div>`;
                 if (resp != null) {
-                    comForResponse.insertAdjacentHTML('afterend', `<div class="response__created">${top}${textBlock}${delBtn}</div>`);
+                    comForResponse.insertAdjacentHTML('afterend', `<div class="response__created">${top}${textBlock}${delBtn.replace(changebot, changeEstimateDiv)}</div>`);
                 }
             });
         }
