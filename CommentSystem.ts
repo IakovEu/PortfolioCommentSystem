@@ -49,6 +49,7 @@ btnSend.addEventListener('click', function (): void {
 		document.querySelector<HTMLSpanElement>(
 			'.comments__insert-span2'
 		).innerHTML = 'Макс. 1000 символов';
+		btnSend.innerHTML = 'Отправить';
 	}
 });
 

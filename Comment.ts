@@ -3,7 +3,7 @@ import { Response } from './Response.js';
 export class Comment {
 	response = new Response();
 	parentBlock: HTMLDivElement = document.querySelector('.comments__insert');
-	// Создание комментария / ответа (новые сверху) 
+	// Создание комментария / ответа (новые сверху)
 	public publishCom(): void {
 		let cA: number = +localStorage.getItem('commentsAmount');
 		let cUserS: string = localStorage.getItem('currentUserSrc');
@@ -48,8 +48,7 @@ export class Comment {
 			this.changeRating('publishCom__minus', cA, 'rgb(255, 0, 0)');
 			this.response.renameBtn(cA);
 		} else {
-			btnSend.innerHTML = 'Отправить';
-			this.response.publishResponse(top, bottomBtns);
+			this.response.publishResponse(bottomBtns);
 		}
 	}
 	// Добавление комментов при перезагрузке
@@ -111,7 +110,7 @@ export class Comment {
 				this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
 				this.response.renameBtn(i);
 				btnSend.innerHTML = 'Отправить';
-				this.response.updateResp(i, top, bottomBtns);
+				this.response.updateResp(i, bottomBtns);
 			}
 		}
 	}
@@ -157,27 +156,38 @@ export class Comment {
 				}
 			});
 	}
-	// Дата и время для отправки комментария (хотелось побольше повзаимодействовать с API, поэтому не через timeStamp)
-	// Дата и время текущие, поэтому с другого api, но нужно обязательно подождать, пока они прогрузятсяи не писать новый, чтобы оба сохранились!
+	// Получение текущих даты и времени
 	public getDate(): void {
-		fetch(
-			'https://timeapi.io/api/timezone/coordinate?latitude=55.44&longitude=37.36'
-		)
-			.then((response): Promise<any> => {
-				return response.json();
-			})
-			.then((result): void => {
-				const currentDate: string = `${result.currentLocalTime
-					.split('-')[2]
-					.slice(0, 2)}.${
-					result.currentLocalTime.split('-')[1]
-				} ${result.currentLocalTime.split('T')[1].slice(0, 5)}`;
-				document.querySelector<HTMLSpanElement>('.publishCom__span').innerHTML =
-					currentDate;
-				localStorage.setItem(
-					`date${localStorage.getItem('commentsAmount')}`,
-					currentDate
-				);
-			});
+		const months = {
+			Jan: '01',
+			Feb: '02',
+			Mar: '03',
+			Apr: '04',
+			May: '05',
+			Jun: '06',
+			Jul: '07',
+			Aug: '08',
+			Sep: '09',
+			Oct: '10',
+			Nov: '11',
+			Dec: '12',
+		};
+
+		let date = `${new Date()}`.split(' ');
+		let currentDate = `${months[date[1]]}.${date[2]} ${date[4].slice(0, 5)}`;
+		document.querySelector<HTMLSpanElement>('.publishCom__span').innerHTML =
+			currentDate;
+
+		const cA: number = +localStorage.getItem('commentsAmount');
+		const rA: number = +localStorage.getItem('respAmount');
+		const btnSend: HTMLButtonElement = document.querySelector(
+			'.comments__insert-send'
+		);
+
+		if (btnSend.textContent == 'Отправить') {
+			localStorage.setItem(`date${cA}`, `${currentDate}`);
+		} else {
+			localStorage.setItem(`respDate${rA}`, `${currentDate}`);
+		}
 	}
 }
