@@ -12,7 +12,8 @@ const area: HTMLTextAreaElement = document.querySelector('#comment');
 const btnSend: HTMLButtonElement = document.querySelector(
 	'.comments__insert-send'
 );
-const favs: HTMLButtonElement = document.querySelector('')
+const showComs: HTMLButtonElement = document.querySelector('#show-coms');
+const showFavs: HTMLButtonElement = document.querySelector('#show-favs');
 
 // Обновление комментариев, их количества, автора, ответов и избранного
 tArea.CurrentPerson();
@@ -22,7 +23,7 @@ favorites.addRemoveMark();
 favorites.updateFavs();
 
 // Регулировка высоты, цвет кнопки, счетчик символов и добавление надписи
-area.addEventListener('input', function () {
+area.addEventListener('input', function (): void {
 	tArea.changeHeight(area);
 	if (area.value.length > 0 && area.value.length <= 1000) {
 		tArea.addToLong(area);
@@ -59,7 +60,32 @@ btnSend.addEventListener('click', function (): void {
 	favorites.addRemoveMark();
 });
 
-// Просмотр избранного
+// Просмотр избранного и изменение кнопки
+showFavs.addEventListener('click', (): void => {
+	favorites.showOnlyFavs();
+	if (window.getComputedStyle(showComs).fontSize === '20px') {
+		showFavs.classList.toggle('active-btn');
+		showFavs.parentElement.classList.toggle('active-block');
+		showComs.classList.toggle('active-btn');
+		showComs.parentElement.classList.toggle('active-block');
+	}
+});
+
+// Просмотр всех комментариев (вернуться после избранного) и изменение кнопки
+showComs.addEventListener('click', (): void => {
+	favorites.backToComs();
+	comment.updateCom();
+	favorites.updateFavs();
+	favorites.addRemoveMark();
+	if (window.getComputedStyle(showFavs).fontSize === '20px') {
+		showFavs.classList.toggle('active-btn');
+		showFavs.parentElement.classList.toggle('active-block');
+		showComs.classList.toggle('active-btn');
+		showComs.parentElement.classList.toggle('active-block');
+	}
+});
 
 // Свободно места в LS из 10MB      (в консоль)
 // var _lsTotal=0,_xLen,_x;for(_x in localStorage){ if(!localStorage.hasOwnProperty(_x)){continue;} _xLen= ((localStorage[_x].length + _x.length)* 2);_lsTotal+=_xLen; console.log(_x.substr(0,50)+" = "+ (_xLen/1024).toFixed(2)+" KB")};console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");
+
+

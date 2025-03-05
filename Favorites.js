@@ -1,5 +1,5 @@
 export class Favorites {
-    // Добавить / уборать из избранного
+    // Добавить / убрать из избранного
     addRemoveMark() {
         const favs = document.querySelectorAll('#favs');
         favs.forEach((el) => {
@@ -39,5 +39,64 @@ export class Favorites {
                 parentBlock.querySelector('#favs').innerHTML = `<img src="ImgForCommentSystem/filledHeart.svg" alt="*"><p>В избранном</p>`;
             });
         }
+    }
+    // Показать только избранные
+    showOnlyFavs() {
+        const favs = localStorage.getItem('favs');
+        const allComs = document.querySelectorAll('.comment__created');
+        const allResps = document.querySelectorAll('.response__created');
+        const comAttr = [];
+        const respAttr = [];
+        const comOnlyFavs = [];
+        const respOnlyFavs = [];
+        if (favs) {
+            favs.split(' ').forEach((el) => {
+                allComs.forEach((com) => {
+                    let num = com.getAttribute('num');
+                    if (`num="${num}"` === el) {
+                        comOnlyFavs.push(num);
+                    }
+                });
+                allResps.forEach((com) => {
+                    let respnum = com.getAttribute('respnum');
+                    if (`respnum="${respnum}"` === el) {
+                        respOnlyFavs.push(respnum);
+                    }
+                });
+            });
+            allComs.forEach((com) => {
+                comAttr.push(com.getAttribute('num'));
+            });
+            allResps.forEach((com) => {
+                respAttr.push(com.getAttribute('respnum'));
+            });
+            const comsDelete = comAttr.filter((e) => !comOnlyFavs.includes(e));
+            const respDelete = respAttr.filter((e) => !respOnlyFavs.includes(e));
+            comsDelete.forEach((el) => {
+                document.querySelector(`[num="${el}"]`).remove();
+            });
+            respDelete.forEach((el) => {
+                document.querySelector(`[respnum="${el}"]`).remove();
+            });
+        }
+        else {
+            allComs.forEach((com) => {
+                com.remove();
+            });
+            allResps.forEach((com) => {
+                com.remove();
+            });
+        }
+    }
+    // Убрать избранные
+    backToComs() {
+        const allComs = document.querySelectorAll('.comment__created');
+        const allResps = document.querySelectorAll('.response__created');
+        allComs.forEach((el) => {
+            el.remove();
+        });
+        allResps.forEach((el) => {
+            el.remove();
+        });
     }
 }

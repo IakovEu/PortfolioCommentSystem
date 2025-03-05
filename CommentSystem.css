@@ -77,12 +77,12 @@
     color: #000000;
 }
 
-.active-block-1 {
+.active-block {
     padding-bottom: 3px;
     border-bottom: 3px solid #000000;
 }
 
-.active-btn-1 {
+.active-btn {
     color: #000000;
     font-size: 20px;
     text-decoration: none;
@@ -207,9 +207,9 @@
 }
 
 /* Стили по созданным комментариям*/
-.comment__created{
+.comment__created {
     max-width: 1007px;
-    margin:0 20px 50px 0;
+    margin: 0 20px 50px 0;
 }
 
 .publishCom__top {
@@ -297,26 +297,27 @@
         transform: rotate(360deg);
     }
 }
+
 /* Стили по созданным ответам на комментарии*/
 
 .response__created {
     max-width: 1007px;
-    margin:0 40px 50px 91px;
+    margin: 0 40px 50px 91px;
 }
 
-.publishCom__answered{
+.publishCom__answered {
     display: flex;
     margin-left: 15px;
     margin-top: -3px;
 }
 
-.publishCom__answered img{
+.publishCom__answered img {
     width: 22px;
     height: 22px;
     margin-right: 15px;
 }
 
-.publishCom__answered p{
+.publishCom__answered p {
     height: 22px;
     font-weight: 300;
     color: #00000060;
