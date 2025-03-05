@@ -29,7 +29,7 @@ export class Comment {
 											<button class="response"><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
 										</div>
 										<div class="publishCom__bottom-favorites">
-											<button><img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p></button>
+											<button id="favs"><img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p></button>
 										</div>
 										<div class="publishCom__bottom-estimate">
 											<button class="publishCom__minus">-</button>
@@ -83,7 +83,7 @@ export class Comment {
 												<button class="response"><img src="ImgForCommentSystem/response-arrow.svg" alt="*"><p>Ответить</p></button>
 											</div>
 											<div class="publishCom__bottom-favorites">
-												<button><img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p></button>
+												<button id="favs"><img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p></button>
 											</div>
 											<div class="publishCom__bottom-estimate">
 												<button class="publishCom__minus">-</button>
@@ -114,13 +114,13 @@ export class Comment {
 			}
 		}
 	}
-	//Изменение рейтинга (отрицательный-красный, положительный-зеленый);
+	// Изменение рейтинга (отрицательный-красный, положительный-зеленый);
 	private changeRating(btn: string, ind: number, clr: string): void {
 		document
 			.querySelector<HTMLButtonElement>(`.${btn}`)
-			.addEventListener('click', () => {
+			.addEventListener('click', (): void => {
 				const pNum: HTMLParagraphElement = document.querySelector(`.p${ind}`);
-				const currentRating: number = +pNum.textContent;
+				let currentRating: number = +pNum.textContent;
 				const cR: number = +localStorage.getItem(`currentRating${ind}`);
 
 				if (cR == currentRating || cR == currentRating * -1) {

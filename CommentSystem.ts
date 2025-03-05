@@ -1,20 +1,25 @@
 import { TArea } from './TArea.js';
 import { Comment } from './Comment.js';
 import { Response } from './Response.js';
+import { Favorites } from './Favorites.js';
 
 const tArea = new TArea();
 const comment = new Comment();
 const response = new Response();
+const favorites = new Favorites();
 
 const area: HTMLTextAreaElement = document.querySelector('#comment');
 const btnSend: HTMLButtonElement = document.querySelector(
 	'.comments__insert-send'
 );
+const favs: HTMLButtonElement = document.querySelector('')
 
-// Обновление комментариев их количества автора и ответов
+// Обновление комментариев, их количества, автора, ответов и избранного
 tArea.CurrentPerson();
 tArea.updateComAmount();
 comment.updateCom();
+favorites.addRemoveMark();
+favorites.updateFavs();
 
 // Регулировка высоты, цвет кнопки, счетчик символов и добавление надписи
 area.addEventListener('input', function () {
@@ -51,7 +56,10 @@ btnSend.addEventListener('click', function (): void {
 		).innerHTML = 'Макс. 1000 символов';
 		btnSend.innerHTML = 'Отправить';
 	}
+	favorites.addRemoveMark();
 });
+
+// Просмотр избранного
 
 // Свободно места в LS из 10MB      (в консоль)
 // var _lsTotal=0,_xLen,_x;for(_x in localStorage){ if(!localStorage.hasOwnProperty(_x)){continue;} _xLen= ((localStorage[_x].length + _x.length)* 2);_lsTotal+=_xLen; console.log(_x.substr(0,50)+" = "+ (_xLen/1024).toFixed(2)+" KB")};console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");
