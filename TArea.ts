@@ -6,9 +6,7 @@ export class TArea {
 	}
 	// Цвет кнопки
 	public btnColor(el?: HTMLTextAreaElement): void {
-		const btn = document.querySelector<HTMLButtonElement>(
-			'.comments__insert-send'
-		);
+		const btn = document.querySelector<HTMLButtonElement>('#send');
 		if (el) {
 			btn.style.color = '#000000';
 			btn.style.backgroundColor = '#ABD873';
@@ -48,9 +46,7 @@ export class TArea {
 	private counter: number = 0;
 	// Для добавления информации об ответах в локал сторейдж
 	public saveToLocal(): void {
-		const btnSend: HTMLButtonElement = document.querySelector(
-			'.comments__insert-send'
-		);
+		const btnSend: HTMLButtonElement = document.querySelector('#send');
 		const area: HTMLTextAreaElement = document.querySelector('#comment');
 		if (btnSend.textContent === 'Отправить') {
 			this.updateCounter();
@@ -82,9 +78,7 @@ export class TArea {
 	}
 	// Обновление кол-ва комментариев
 	public updateComAmount(): void {
-		const btnSend: HTMLButtonElement = document.querySelector(
-			'.comments__insert-send'
-		);
+		const btnSend: HTMLButtonElement = document.querySelector('#send');
 		if (btnSend.textContent === 'Отправить') {
 			const amount: HTMLSpanElement =
 				document.querySelector('.comments__amount');

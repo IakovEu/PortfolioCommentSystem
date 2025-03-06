@@ -8,10 +8,7 @@ export class Comment {
 		let cA: number = +localStorage.getItem('commentsAmount');
 		let cUserS: string = localStorage.getItem('currentUserSrc');
 		let cUserN: string = localStorage.getItem('currentUserName');
-
-		const btnSend: HTMLButtonElement = document.querySelector(
-			'.comments__insert-send'
-		);
+		const btnSend: HTMLButtonElement = document.querySelector('#send');
 
 		const top: string = `<div class="publishCom__top">
                                 <div class="comments__insert-photo">
@@ -55,9 +52,8 @@ export class Comment {
 	public updateCom(): void {
 		if (Number(localStorage.getItem('commentsAmount')) > 0) {
 			const cA: number = +localStorage.getItem('commentsAmount');
-			const btnSend: HTMLButtonElement = document.querySelector(
-				'.comments__insert-send'
-			);
+			const btnSend: HTMLButtonElement = document.querySelector('#send');
+
 			for (let i: number = 1; i <= cA; i++) {
 				let getRating = +localStorage.getItem(`rating${i}`);
 				// currentRating я использую для сравнения с тем, который будет изменяться
@@ -166,9 +162,7 @@ export class Comment {
 
 		const cA: number = +localStorage.getItem('commentsAmount');
 		const rA: number = +localStorage.getItem('respAmount');
-		const btnSend: HTMLButtonElement = document.querySelector(
-			'.comments__insert-send'
-		);
+		const btnSend: HTMLButtonElement = document.querySelector('#send');
 
 		if (btnSend.textContent == 'Отправить') {
 			localStorage.setItem(`date${cA}`, `${currentDate}`);

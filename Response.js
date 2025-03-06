@@ -9,7 +9,7 @@ export class Response {
         response.addEventListener('click', () => {
             const comClicked = +response.parentElement.parentElement.parentElement.getAttribute('num');
             let who = localStorage.getItem(`name${ind}`);
-            document.querySelector('.comments__insert-send').innerHTML = `Ответить ${who}`;
+            document.querySelector('#send').innerHTML = `Ответить ${who}`;
             document
                 .querySelector('.comments__top-btns')
                 .scrollIntoView({

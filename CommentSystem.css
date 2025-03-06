@@ -73,7 +73,8 @@
 
 .top-btn:hover,
 .publishCom__bottom-response button:hover,
-.publishCom__bottom-favorites button:hover {
+.publishCom__bottom-favorites button:hover,
+.comments__list p:hover {
     color: #000000;
 }
 
@@ -321,4 +322,40 @@
     height: 22px;
     font-weight: 300;
     color: #00000060;
+}
+
+#triangle {
+    rotate: 180deg;
+}
+
+.comments__list {
+    display: none;
+    z-index: 2;
+    width: 230px;
+    height: 100px;
+    position: absolute;
+    -webkit-filter: drop-shadow(5px 5px 30px rgba(133, 133, 133, 0.5));
+    filter: drop-shadow(5px 5px 30px rgba(133, 133, 133, 0.5));
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 5px 16px 7px 0px;
+    color: #00000060;
+}
+
+.comments__list p {
+    position: relative;
+    margin-bottom: 5.5px;
+    cursor: pointer;
+    padding-left: 30px;
+}
+
+.comments__list span {
+    position: absolute;
+    top: 0;
+    left: 10px;
+}
+
+.active {
+    display: block;
 }

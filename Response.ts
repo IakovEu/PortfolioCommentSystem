@@ -12,7 +12,7 @@ export class Response {
 
 			let who: string = localStorage.getItem(`name${ind}`);
 			document.querySelector<HTMLButtonElement>(
-				'.comments__insert-send'
+				'#send'
 			).innerHTML = `Ответить ${who}`;
 
 			document

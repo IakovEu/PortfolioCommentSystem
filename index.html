@@ -28,11 +28,21 @@
             <section class="main__comments">
                 <div class="comments__top-btns">
                     <div class="comments__first active-block">
-                        <button class="top-btn active-btn" id="show-coms">Комментарии</button><span class="comments__amount">(0)</span>
+                        <button class="top-btn active-btn" id="show-coms">Комментарии</button><span
+                            class="comments__amount">(0)</span>
                     </div>
                     <div>
-                        <button class="top-btn">По количеству оценок</button>
-                        <button class="top-btn"><img src="ImgForCommentSystem/triangle.svg" alt="^"></button>
+                        <button class="top-btn" id="show-list" how="idk">По количеству оценок</button>
+                        <button class="top-btn" id="triangle"><img src="ImgForCommentSystem/triangle.svg"
+                                alt="^"></button>
+                        <div class="comments__list">
+                            <ul>
+                                <p id="list__p">По дате</p>
+                                <p id="list__p">По количеству оценок</p>
+                                <p id="list__p">По актуальности</p>
+                                <p id="list__p">По количеству ответов</p>
+                            </ul>
+                        </div>
                     </div>
                     <div class="comments__last">
                         <button class="top-btn" id="show-favs">Избранное</button>
@@ -51,7 +61,7 @@
                         <textarea name="comment" id="comment" placeholder="Введите текст сообщения..."></textarea>
                         <div class="comments__insert-add">
                             <div class="comments__insert-additional"></div>
-                            <button class="comments__insert-send">Отправить</button>
+                            <button class="comments__insert-send" id="send">Отправить</button>
                         </div>
                     </div>
                 </div>
