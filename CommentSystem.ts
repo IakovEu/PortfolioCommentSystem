@@ -61,7 +61,7 @@ btnSend.addEventListener('click', function (): void {
 	favorites.addRemoveMark();
 });
 
-// Просмотр избранного и изменение кнопки
+// Просмотр избранного, изменение кнопки и убрать галочку (с выпадающего списка)
 showFavs.addEventListener('click', (): void => {
 	favorites.showOnlyFavs();
 	if (window.getComputedStyle(showComs).fontSize === '20px') {
@@ -70,9 +70,14 @@ showFavs.addEventListener('click', (): void => {
 		showComs.classList.toggle('active-btn');
 		showComs.parentElement.classList.toggle('active-block');
 	}
+	const removeMe: Element = document.querySelector('#remove-span');
+	document
+		.querySelector<HTMLButtonElement>('#show-list')
+		.setAttribute('how', 'idk');
+	removeMe ? removeMe.remove() : removeMe;
 });
 
-// Просмотр всех комментариев (вернуться после избранного) и изменение кнопки
+// Просмотр всех комментариев (вернуться после избранного), изменение кнопки и убрать галочку
 showComs.addEventListener('click', (): void => {
 	favorites.backToComs();
 	comment.updateCom();
@@ -84,6 +89,11 @@ showComs.addEventListener('click', (): void => {
 		showComs.classList.toggle('active-btn');
 		showComs.parentElement.classList.toggle('active-block');
 	}
+	const removeMe: Element = document.querySelector('#remove-span');
+	document
+		.querySelector<HTMLButtonElement>('#show-list')
+		.setAttribute('how', 'idk');
+	removeMe ? removeMe.remove() : removeMe;
 });
 
 // Сколько места занято в LS (в консоль)
