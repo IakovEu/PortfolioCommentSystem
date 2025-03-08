@@ -1,3 +1,5 @@
+import { Node } from 'typescript';
+
 // Делаю именно сорртировку, а не отрисовку по новой, чтобы сохранить события на элементах
 export class Sorting {
 	showListBtn: HTMLButtonElement = document.querySelector('#show-list');
@@ -124,7 +126,12 @@ export class Sorting {
 		} else if (nextHow === 'По актуальности') {
 			alert('Все комментарии актуальны!');
 		} else {
-			console.log(4);
+			const allResps: NodeListOf<Element> = document.querySelectorAll(
+				'.publishCom__answered'
+			);
+			allResps.forEach((el: Element) => {
+                console.log(el.children[1].textContent);
+            });
 		}
 	}
 	// Рейтинги в массив
