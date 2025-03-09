@@ -1,6 +1,4 @@
-import { Node } from 'typescript';
-
-// Делаю именно сорртировку, а не отрисовку по новой, чтобы сохранить события на элементах
+// Делаю именно сортировку, а не отрисовку по новой, чтобы сохранить события на элементах
 export class Sorting {
 	showListBtn: HTMLButtonElement = document.querySelector('#show-list');
 	list: HTMLDivElement = document.querySelector('.comments__list');
@@ -54,6 +52,9 @@ export class Sorting {
 		const dateToSort: NodeListOf<Element> =
 			document.querySelectorAll('.publishCom__span');
 		const comsAndResps: string[] = [];
+		const order: string = this.triangle.getAttribute('order');
+		const respDivs: NodeListOf<Element> =
+			document.querySelectorAll('.response__created');
 
 		if (nextHow === 'По дате') {
 			dateToSort.forEach((el: Element): void => {
@@ -75,8 +76,6 @@ export class Sorting {
 							.join('');
 					}
 				});
-
-			const order: string = this.triangle.getAttribute('order');
 
 			if (order === 'normal') {
 				sortedByDate.forEach((el) => {
@@ -100,7 +99,6 @@ export class Sorting {
 			const sortRatings: number[] = ratings.sort((a, b) => b - a);
 			const allRatings: NodeListOf<Element> =
 				document.querySelectorAll('[rating]');
-			const order: string = this.triangle.getAttribute('order');
 
 			if (order === 'normal') {
 				sortRatings.forEach((r) => {
@@ -129,9 +127,79 @@ export class Sorting {
 			const allResps: NodeListOf<Element> = document.querySelectorAll(
 				'.publishCom__answered'
 			);
+			const allComs: NodeListOf<Element> =
+				document.querySelectorAll('.comment__created');
+			type x = {
+				[key: string]: number;
+			};
+			const answeredTo: x = {};
+			const sortedNums: number[] = [];
+			const orderNames: string[] = [];
+
 			allResps.forEach((el: Element) => {
-                console.log(el.children[1].textContent);
-            });
+				let name: string = el.children[1].textContent;
+				if (name in answeredTo) {
+					answeredTo[name] += 1;
+				} else {
+					answeredTo[name] = 1;
+				}
+			});
+
+			for (let key in answeredTo) {
+				sortedNums.push(answeredTo[key]);
+			}
+			sortedNums.sort((a, b) => b - a);
+
+			sortedNums.forEach((el) => {
+				for (let key in answeredTo) {
+					if (answeredTo[key] === el) {
+						orderNames.push(key);
+					}
+				}
+			});
+			// Повторяющиеся имена убираю
+			const finalOrder: string[] = [...new Set(orderNames)];
+
+			if (order === 'normal') {
+				finalOrder.forEach((name) => {
+					allComs.forEach((el) => {
+						let userName: string =
+							el.children[0].children[0].children[1].textContent;
+						if (userName === name) {
+							el.setAttribute('hasresps', 'yes');
+							this.parentBlock.append(el);
+						}
+					});
+				});
+
+				allComs.forEach((el) => {
+					if (el.getAttribute('hasresps') !== 'yes') {
+						this.parentBlock.append(el);
+					}
+				});
+			} else {
+				finalOrder.reverse().forEach((name) => {
+					allComs.forEach((el) => {
+						let userName: string =
+							el.children[0].children[0].children[1].textContent;
+						if (userName === name) {
+							el.setAttribute('hasresps', 'yes');
+							this.parentBlock.append(el);
+						}
+					});
+				});
+			}
+			respDivs.forEach((r) => {
+				let answered: string =
+					r.children[0].children[0].children[2].children[1].textContent;
+				allComs.forEach((el) => {
+					let userName: string =
+						el.children[0].children[0].children[1].textContent;
+					if (answered === userName) {
+						el.after(r);
+					}
+				});
+			});
 		}
 	}
 	// Рейтинги в массив

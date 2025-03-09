@@ -6,6 +6,8 @@ export class Response {
     // Изменение кнопки отправки, перемещение к ней и событие на каждую кнопку ответа (нажали, написали в обычное поле ввода и ответили)
     renameBtn(ind) {
         const response = document.querySelector('.response');
+        // На кнопку ответа нажать один раз и обязательно написать ответ! иначе потом может сломаться тк в LS будет несуществующий ответ 
+        // Я не смог это исправить, пробовал написать отдельную функцию и вызывать при нажатии на кнопку ответить, но так счетчик тоже сбивается 
         response.addEventListener('click', () => {
             const comClicked = +response.parentElement.parentElement.parentElement.getAttribute('num');
             let who = localStorage.getItem(`name${ind}`);
