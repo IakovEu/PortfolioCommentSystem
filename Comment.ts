@@ -44,8 +44,8 @@ export class Comment {
 			);
 			this.changeRating('publishCom__plus', cA, 'rgb(138, 197, 64)');
 			this.changeRating('publishCom__minus', cA, 'rgb(255, 0, 0)');
-			// this.response.renameBtn(cA);
 		} else {
+			this.response.renameBtn(cA);
 			// this.response.publishResponse(bottomBtns);
 		}
 	}

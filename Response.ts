@@ -2,20 +2,17 @@
 // Функция которая задает время вызывается позже чем эта, поэтому пришлось немного дублировать
 // Toп дублировал тк новые вводные, через slice или splice слишком много менять
 export class Response {
-	respCounter: number = 0;
 	// Изменение кнопки отправки, перемещение к ней и событие на каждую кнопку ответа (нажали, написали в обычное поле ввода и ответили)
 	public renameBtn(ind: number): void {
 		const response: HTMLButtonElement = document.querySelector('.response');
-// На кнопку ответа нажать один раз и обязательно написать ответ! иначе потом может сломаться тк в LS будет несуществующий ответ 
-// Я не смог это исправить, пробовал написать отдельную функцию и вызывать при нажатии на кнопку ответить, но так счетчик тоже сбивается 
-		response.addEventListener('click', () => {
-			const comClicked: number =
-				+response.parentElement.parentElement.parentElement.getAttribute('num');
 
-			let who: string = localStorage.getItem(`name${ind}`);
-			document.querySelector<HTMLButtonElement>(
-				'#send'
-			).innerHTML = `Ответить ${who}`;
+		response.addEventListener('click', () => {
+			const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+			const btnSend: HTMLButtonElement = document.querySelector('#send');
+			// const comClicked: number =
+			// 	+response.parentElement.parentElement.parentElement.getAttribute('num');
+
+			btnSend.innerHTML = `Ответить ${comments[ind].name}`;
 
 			document
 				.querySelector<HTMLDivElement>('.comments__top-btns')
@@ -23,24 +20,26 @@ export class Response {
 					behavior: 'smooth',
 					block: 'start',
 				});
-			localStorage.setItem('comClicked', `${comClicked}`);
-			+localStorage.getItem('respAmount') != 0
-				? (this.respCounter = +localStorage.getItem('respAmount'))
-				: this.respCounter;
+			
 
-			this.respCounter++;
-			localStorage.setItem('respAmount', `${this.respCounter}`);
-			localStorage.setItem(
-				`respSrc${this.respCounter}`,
-				`${localStorage.getItem('currentUserSrc')}`
-			);
+			// localStorage.setItem('comClicked', `${comClicked}`);
+			// +localStorage.getItem('respAmount') != 0
+			// 	? (this.respCounter = +localStorage.getItem('respAmount'))
+			// 	: this.respCounter;
 
-			let respNum: string = localStorage.getItem('respAmount');
-			let respIn: string = localStorage.getItem(`respIn${comClicked}Com`);
+			// this.respCounter++;
+			// localStorage.setItem('respAmount', `${this.respCounter}`);
+			// localStorage.setItem(
+			// 	`respSrc${this.respCounter}`,
+			// 	`${localStorage.getItem('currentUserSrc')}`
+			// );
 
-			+respIn != 0
-				? localStorage.setItem(`respIn${comClicked}Com`, `${respIn} ${respNum}`)
-				: localStorage.setItem(`respIn${comClicked}Com`, `${respNum}`);
+			// let respNum: string = localStorage.getItem('respAmount');
+			// let respIn: string = localStorage.getItem(`respIn${comClicked}Com`);
+
+			// +respIn != 0
+			// 	? localStorage.setItem(`respIn${comClicked}Com`, `${respIn} ${respNum}`)
+			// 	: localStorage.setItem(`respIn${comClicked}Com`, `${respNum}`);
 		});
 	}
 	// Создание ответа на комментарий
