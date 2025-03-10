@@ -15,9 +15,10 @@ const btnSend: HTMLButtonElement = document.querySelector('#send');
 const showComs: HTMLButtonElement = document.querySelector('#show-coms');
 const showFavs: HTMLButtonElement = document.querySelector('#show-favs');
 
-// Получение данных об авторе, создание массива в LS, обновление комментариев
+// Получение данных об авторе, создание массива в LS, обновление комментариев и их кол-ва
 tArea.createDataArr();
 tArea.CurrentPerson();
+tArea.updateComAmount();
 comment.setInitialRating();
 comment.updateCom();
 // favorites.addRemoveMark();
@@ -47,6 +48,7 @@ btnSend.addEventListener('click', function (): void {
 	const x = area.value.trim();
 	if (x.length > 0 && x.length <= 1000) {
 		tArea.saveToLocal();
+		tArea.updateComAmount();
 		comment.getDate();
 		comment.publishCom();
 		area.value = '';

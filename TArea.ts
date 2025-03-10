@@ -6,7 +6,7 @@ export class TArea {
 	}
 	// Цвет кнопки
 	public btnColor(el?: HTMLTextAreaElement): void {
-		const btn = document.querySelector<HTMLButtonElement>('#send');
+		const btn: HTMLButtonElement = document.querySelector('#send');
 		if (el) {
 			btn.style.color = '#000000';
 			btn.style.backgroundColor = '#ABD873';
@@ -84,6 +84,15 @@ export class TArea {
 
 				localStorage.setItem('comments', JSON.stringify(allComs));
 			}
+		}
+	}
+	// Обновление кол-ва комментариев
+	updateComAmount() {
+		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+		const btn: HTMLButtonElement = document.querySelector('#send');
+		if (btn.textContent === 'Отправить' && comments.length !== 0) {
+			const amount = document.querySelector('.comments__amount');
+			amount.innerHTML = `(${comments.length})`
 		}
 	}
 	// Текущий человек

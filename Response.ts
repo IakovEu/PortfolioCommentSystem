@@ -127,7 +127,7 @@ export class Response {
 
 				const changeEstimateDiv = `<div class="publishCom__bottom-estimate">
 												<button class="publishCom__minus resp-minus">-</button>
-												<p class="pp${el}">${getRating}</p>
+												<p class="pp${0}">${getRating}</p>
 												<button class="publishCom__plus resp-plus">+</button>
 											</div>`;
 				const finalBot = delBtn.replace(changeBot, changeEstimateDiv);
@@ -137,16 +137,16 @@ export class Response {
 					`<div class="response__created" respNum="${el}">${top}${textBlock}${finalBot}</div>`
 				);
 
-				if (getRating < 0 ) {
-					document.querySelector<HTMLParagraphElement>(`.pp${el}`).style.color =
-						'rgb(255, 0, 0)';
-					const minusWithoutMinus: number =
-						+document.querySelector(`.pp${el}`).textContent * -1;
-					document.querySelector(`.pp${el}`).innerHTML = `${minusWithoutMinus}`;
-				} else {
-					document.querySelector<HTMLParagraphElement>(`.pp${el}`).style.color =
-						'rgb(138, 197, 64)';
-				}
+				// if (getRating < 0 ) {
+				// 	document.querySelector<HTMLParagraphElement>(`.pp${el}`).style.color =
+				// 		'rgb(255, 0, 0)';
+				// 	const minusWithoutMinus: number =
+				// 		+document.querySelector(`.pp${el}`).textContent * -1;
+				// 	document.querySelector(`.pp${el}`).innerHTML = `${minusWithoutMinus}`;
+				// } else {
+				// 	document.querySelector<HTMLParagraphElement>(`.pp${el}`).style.color =
+				// 		'rgb(138, 197, 64)';
+				// }
 				// localStorage.setItem(`initialRespRating${el}`, `${getRating}`);
 				// this.changeRespRating('resp-plus', +el, 'rgb(138, 197, 64)');
 				// this.changeRespRating('resp-minus', +el, 'rgb(255, 0, 0)');
