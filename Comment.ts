@@ -9,16 +9,17 @@ export class Comment {
 		const btnSend: HTMLButtonElement = document.querySelector('#send');
 		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
 		const cA: number = comments.length - 1;
-		const cUserS: string = localStorage.getItem('currentUserSrc');
-		const cUserN: string = localStorage.getItem('currentUserName');
+		const userSrc: string = localStorage.getItem('currentUserSrc');
+		const userName: string = localStorage.getItem('currentUserName');
+		const userDate: string = comments[cA].date;
 		const txt: string = comments[cA].txt;
 
 		const top: string = `<div class="publishCom__top">
                                 <div class="comments__insert-photo">
-                                    <img src="${cUserS}" alt="*">
-                                    <span class="comments__insert-span1">${cUserN}</span>
+                                    <img src="${userSrc}" alt="*">
+                                    <span class="comments__insert-span1">${userName}</span>
                                 </div>
-                                <span class="publishCom__span">Дата и время прогружаются...</span>
+                                <span class="publishCom__span">${userDate}</span>
                             </div>`;
 
 		const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
@@ -44,9 +45,9 @@ export class Comment {
 			);
 			this.changeRating('publishCom__plus', cA, 'rgb(138, 197, 64)');
 			this.changeRating('publishCom__minus', cA, 'rgb(255, 0, 0)');
-		} else {
 			this.response.renameBtn(cA);
-			// this.response.publishResponse(bottomBtns);
+		} else {
+			this.response.publishResponse(bottomBtns);
 		}
 	}
 	// Добавление комментов при перезагрузке
@@ -104,9 +105,9 @@ export class Comment {
 				}
 				this.changeRating('publishCom__plus', i, 'rgb(138, 197, 64)');
 				this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
-				// this.response.renameBtn(i);
+				this.response.renameBtn(i);
 				btnSend.innerHTML = 'Отправить';
-				// this.response.updateResp(i, bottomBtns);
+				this.response.updateResp(i, bottomBtns);
 			}
 		}
 	}
@@ -167,21 +168,17 @@ export class Comment {
 			Dec: '12',
 		};
 
-		let date = `${new Date()}`.split(' ');
-		let currentDate = `${months[date[1]]}.${date[2]} ${date[4].slice(0, 5)}`;
-		document.querySelector<HTMLSpanElement>('.publishCom__span').innerHTML =
-			currentDate;
-
+		const date = `${new Date()}`.split(' ');
+		const currentDate = `${months[date[1]]}.${date[2]} ${date[4].slice(0, 5)}`;
 		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
 		const cA: number = comments.length - 1;
-		// const rA: number = +localStorage.getItem('respAmount');
 		const btnSend: HTMLButtonElement = document.querySelector('#send');
 
 		if (btnSend.textContent == 'Отправить') {
 			comments[cA].date = currentDate;
 			localStorage.setItem('comments', JSON.stringify(comments));
 		} else {
-			// localStorage.setItem(`respDate${rA}`, `${currentDate}`);
+			localStorage.setItem('currentDate', currentDate)
 		}
 	}
 }

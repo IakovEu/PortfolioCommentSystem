@@ -53,20 +53,21 @@ export class TArea {
 	public saveToLocal(): void {
 		const btnSend: HTMLButtonElement = document.querySelector('#send');
 		const area: HTMLTextAreaElement = document.querySelector('#comment');
-		if (btnSend.textContent === 'Отправить') {
-			if (
-				area.value.trim() &&
-				typeof area.value === 'string' &&
-				area.value.length <= 1000
-			) {
+
+		if (
+			area.value.trim() &&
+			typeof area.value === 'string' &&
+			area.value.length <= 1000
+		) {
+			if (btnSend.textContent === 'Отправить') {
 				type x = {
-					name: string,
-					src: string,
-					txt: string,
-					date: string,
-					rating: number,
-					ratingToCompare: number,
-					answers: unknown[]
+					name: string;
+					src: string;
+					txt: string;
+					date: string;
+					rating: number;
+					ratingToCompare: number;
+					answers: unknown[];
 				};
 				const com: x = {
 					name: localStorage.getItem('currentUserName'),

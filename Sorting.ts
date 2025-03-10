@@ -1,5 +1,5 @@
-// Делаю именно сортировку, а не отрисовку по новой, чтобы сохранить события на элементах
 export class Sorting {
+	// Делаю именно сортировку, а не отрисовку по новой, чтобы сохранить события на элементах
 	showListBtn: HTMLButtonElement = document.querySelector('#show-list');
 	list: HTMLDivElement = document.querySelector('.comments__list');
 	pSort: NodeListOf<Element> = document.querySelectorAll('#list__p');

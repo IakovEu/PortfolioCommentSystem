@@ -47,8 +47,8 @@ btnSend.addEventListener('click', function (): void {
 	const x = area.value.trim();
 	if (x.length > 0 && x.length <= 1000) {
 		tArea.saveToLocal();
-		comment.publishCom();
 		comment.getDate();
+		comment.publishCom();
 		area.value = '';
 		area.style.height = '62px';
 		btnSend.style.color = ' #00000060';
