@@ -42,55 +42,51 @@ export class TArea {
 			symbols.style.color = '#00000060';
 		}
 	}
-	// Для добавления информации о комментах в локал сторейдж
-	private counter: number = 0;
-	// Для добавления информации об ответах в локал сторейдж
+	// Создание массива для всей инфы
+	public createDataArr(): void {
+		const comments: string = localStorage.getItem('comments');
+		if (comments === null) {
+			localStorage.setItem('comments', JSON.stringify([]));
+		}
+	}
+	// Добавление информации о комментах в локал сторейдж
 	public saveToLocal(): void {
 		const btnSend: HTMLButtonElement = document.querySelector('#send');
 		const area: HTMLTextAreaElement = document.querySelector('#comment');
 		if (btnSend.textContent === 'Отправить') {
-			this.updateCounter();
 			if (
 				area.value.trim() &&
 				typeof area.value === 'string' &&
 				area.value.length <= 1000
 			) {
-				this.counter++;
-				localStorage.setItem(`com${this.counter}`, area.value.trim());
-				localStorage.setItem(
-					`name${this.counter}`,
-					localStorage.getItem('currentUserName')
-				);
-				localStorage.setItem(
-					`src${this.counter}`,
-					localStorage.getItem('currentUserSrc')
-				);
-			}
-		}
-	}
-	// Обновление счетчика комментариев
-	private updateCounter(): void {
-		if (this.counter === 0 && +localStorage.getItem('commentsAmount') !== 0) {
-			this.counter = +localStorage.commentsAmount;
-		}
-		const counterToStr: string = `${this.counter + 1}`;
-		localStorage.setItem('commentsAmount', counterToStr);
-	}
-	// Обновление кол-ва комментариев
-	public updateComAmount(): void {
-		const btnSend: HTMLButtonElement = document.querySelector('#send');
-		if (btnSend.textContent === 'Отправить') {
-			const amount: HTMLSpanElement =
-				document.querySelector('.comments__amount');
-			if (Number(localStorage.getItem('commentsAmount')) !== 0) {
-				amount.innerHTML = `(${localStorage.getItem('commentsAmount')})`;
-			} else {
-				amount.innerHTML = `(${this.counter})`;
+				type x = {
+					name: string,
+					src: string,
+					txt: string,
+					date: string,
+					rating: number,
+					ratingToCompare: number,
+					answers: unknown[]
+				};
+				const com: x = {
+					name: localStorage.getItem('currentUserName'),
+					src: localStorage.getItem('currentUserSrc'),
+					txt: area.value.trim(),
+					date: '',
+					rating: 0,
+					ratingToCompare: 0,
+					answers: [],
+				};
+
+				const allComs: object[] = JSON.parse(localStorage.getItem('comments'));
+				allComs.push(com);
+
+				localStorage.setItem('comments', JSON.stringify(allComs));
 			}
 		}
 	}
 	// Текущий человек
-	CurrentPerson(): void {
+	public CurrentPerson(): void {
 		fetch('https://randomuser.me/api/')
 			.then((response): Promise<any> => {
 				return response.json();

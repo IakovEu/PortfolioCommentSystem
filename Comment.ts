@@ -3,12 +3,15 @@ import { Response } from './Response.js';
 export class Comment {
 	response = new Response();
 	parentBlock: HTMLDivElement = document.querySelector('.comments__insert');
+
 	// Создание комментария / ответа (новые сверху)
 	public publishCom(): void {
-		let cA: number = +localStorage.getItem('commentsAmount');
-		let cUserS: string = localStorage.getItem('currentUserSrc');
-		let cUserN: string = localStorage.getItem('currentUserName');
 		const btnSend: HTMLButtonElement = document.querySelector('#send');
+		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+		const cA: number = comments.length - 1;
+		const cUserS: string = localStorage.getItem('currentUserSrc');
+		const cUserN: string = localStorage.getItem('currentUserName');
+		const txt: string = comments[cA].txt;
 
 		const top: string = `<div class="publishCom__top">
                                 <div class="comments__insert-photo">
@@ -18,7 +21,6 @@ export class Comment {
                                 <span class="publishCom__span">Дата и время прогружаются...</span>
                             </div>`;
 
-		const txt: string = localStorage.getItem(`com${cA}`);
 		const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
 
 		const bottomBtns: string = `<div class="publishCom__bottom">
@@ -34,35 +36,33 @@ export class Comment {
 											<button class="publishCom__plus">+</button>
 										</div>
 									</div>`;
+
 		if (btnSend.textContent === 'Отправить') {
-			// currentRating я использую для сравнения с тем, который будет изменяться
-			localStorage.setItem(`currentRating${cA}`, '0');
 			this.parentBlock.insertAdjacentHTML(
 				'afterend',
 				`<div class="comment__created" num="${cA}">${top}${textBlock}${bottomBtns}</div>`
 			);
 			this.changeRating('publishCom__plus', cA, 'rgb(138, 197, 64)');
 			this.changeRating('publishCom__minus', cA, 'rgb(255, 0, 0)');
-			this.response.renameBtn(cA);
+			// this.response.renameBtn(cA);
 		} else {
-			this.response.publishResponse(bottomBtns);
+			// this.response.publishResponse(bottomBtns);
 		}
 	}
 	// Добавление комментов при перезагрузке
 	public updateCom(): void {
-		if (Number(localStorage.getItem('commentsAmount')) > 0) {
-			const cA: number = +localStorage.getItem('commentsAmount');
-			const btnSend: HTMLButtonElement = document.querySelector('#send');
+		const btnSend: HTMLButtonElement = document.querySelector('#send');
+		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+		const cA: number = comments.length;
 
-			for (let i: number = 1; i <= cA; i++) {
-				let getRating = +localStorage.getItem(`rating${i}`);
-				// currentRating я использую для сравнения с тем, который будет изменяться
-				localStorage.setItem(`currentRating${i}`, `${getRating}`);
-				getRating == null ? (getRating = 0) : getRating;
+		if (cA > 0) {
+			for (let i: number = 0; i <= cA - 1; i++) {
+				let getRating: number = comments[i].rating;
+				const userName: string = comments[i].name;
+				const userSrc: string = comments[i].src;
+				const userDate: string = comments[i].date;
+				const txt: string = comments[i].txt;
 
-				const userName: string = localStorage.getItem(`name${i}`);
-				const userSrc: string = localStorage.getItem(`src${i}`);
-				const userDate: string = localStorage.getItem(`date${i}`);
 				const top: string = `<div class="publishCom__top">
 									<div class="comments__insert-photo">
 										<img src="${userSrc}" alt="*">
@@ -71,7 +71,6 @@ export class Comment {
 									<span class="publishCom__span">${userDate}</span>
 								</div>`;
 
-				const txt: string = localStorage.getItem(`com${i}`);
 				const textBlock: string = `<div class="publishCom__txt">${txt}</div>`;
 
 				const bottomBtns: string = `<div class="publishCom__bottom">
@@ -92,21 +91,32 @@ export class Comment {
 					'afterend',
 					`<div class="comment__created" num="${i}">${top}${textBlock}${bottomBtns}</div>`
 				);
-				if (getRating < 0 && document.querySelector(`.p${i}`)) {
+
+				if (getRating < 0) {
 					document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
 						'rgb(255, 0, 0)';
 					const minusWithoutMinus: number =
 						+document.querySelector(`.p${i}`).textContent * -1;
 					document.querySelector(`.p${i}`).innerHTML = `${minusWithoutMinus}`;
-				} else if (document.querySelector(`.p${i}`)) {
+				} else {
 					document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
 						'rgb(138, 197, 64)';
 				}
 				this.changeRating('publishCom__plus', i, 'rgb(138, 197, 64)');
 				this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
-				this.response.renameBtn(i);
+				// this.response.renameBtn(i);
 				btnSend.innerHTML = 'Отправить';
-				this.response.updateResp(i, bottomBtns);
+				// this.response.updateResp(i, bottomBtns);
+			}
+		}
+	}
+	// Установка изначального рейтинга для сравнения
+	public setInitialRating(): void {
+		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+		if (comments.length > 0) {
+			for (let i = 0; i <= comments.length - 1; i++) {
+				comments[i].ratingToCompare = comments[i].rating;
+				localStorage.setItem('comments', JSON.stringify(comments));
 			}
 		}
 	}
@@ -115,26 +125,28 @@ export class Comment {
 		document
 			.querySelector<HTMLButtonElement>(`.${btn}`)
 			.addEventListener('click', (): void => {
+				const comments: any[] = JSON.parse(localStorage.getItem('comments'));
 				const pNum: HTMLParagraphElement = document.querySelector(`.p${ind}`);
 				let currentRating: number = +pNum.textContent;
-				const cR: number = +localStorage.getItem(`currentRating${ind}`);
+				const initialR: number = comments[ind].ratingToCompare;
 
-				if (cR == currentRating || cR == currentRating * -1) {
+				if (initialR == currentRating || initialR === currentRating * -1) {
 					if (
 						window.getComputedStyle(pNum).color === clr ||
-						currentRating == 0
+						currentRating === 0
 					) {
 						pNum.style.color = `${clr}`;
 						pNum.innerHTML = `${currentRating + 1}`;
 					} else {
 						pNum.innerHTML = `${currentRating - 1}`;
 					}
+
 					if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
-						const setRating: number = +pNum.textContent; // Она тут не случайно, с currentRating не работает
-						localStorage.setItem(`rating${ind}`, `${setRating * -1}`);
+						comments[ind].rating = +pNum.textContent * -1;
 					} else {
-						localStorage.setItem(`rating${ind}`, pNum.textContent);
+						comments[ind].rating = +pNum.textContent;
 					}
+					localStorage.setItem('comments', JSON.stringify(comments));
 				}
 			});
 	}
@@ -160,14 +172,16 @@ export class Comment {
 		document.querySelector<HTMLSpanElement>('.publishCom__span').innerHTML =
 			currentDate;
 
-		const cA: number = +localStorage.getItem('commentsAmount');
-		const rA: number = +localStorage.getItem('respAmount');
+		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+		const cA: number = comments.length - 1;
+		// const rA: number = +localStorage.getItem('respAmount');
 		const btnSend: HTMLButtonElement = document.querySelector('#send');
 
 		if (btnSend.textContent == 'Отправить') {
-			localStorage.setItem(`date${cA}`, `${currentDate}`);
+			comments[cA].date = currentDate;
+			localStorage.setItem('comments', JSON.stringify(comments));
 		} else {
-			localStorage.setItem(`respDate${rA}`, `${currentDate}`);
+			// localStorage.setItem(`respDate${rA}`, `${currentDate}`);
 		}
 	}
 }
