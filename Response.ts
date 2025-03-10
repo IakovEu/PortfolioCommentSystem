@@ -109,7 +109,7 @@ export class Response {
 				const txt: string = el.txt;
 				const respName = el.name;
 				const who = comments[ind].name;
-				const getRating = comments[ind].rating;
+				const getRating = el.rating;
 
 				const top = `<div class="publishCom__top">
 									<div class="comments__insert-photo">
