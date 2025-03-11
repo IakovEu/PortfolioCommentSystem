@@ -45,8 +45,11 @@ export class TArea {
 	// Создание массива для всей инфы
 	public createDataArr(): void {
 		const comments: string = localStorage.getItem('comments');
+		const favorites: string = localStorage.getItem('favorites');
 		if (comments === null) {
 			localStorage.setItem('comments', JSON.stringify([]));
+		} else if (favorites === null) {
+			localStorage.setItem('favorites', JSON.stringify([]));
 		}
 	}
 	// Добавление информации о комментах в локал сторейдж
@@ -92,7 +95,7 @@ export class TArea {
 		const btn: HTMLButtonElement = document.querySelector('#send');
 		if (btn.textContent === 'Отправить' && comments.length !== 0) {
 			const amount = document.querySelector('.comments__amount');
-			amount.innerHTML = `(${comments.length})`
+			amount.innerHTML = `(${comments.length})`;
 		}
 	}
 	// Текущий человек

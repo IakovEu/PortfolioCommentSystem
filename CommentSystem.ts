@@ -15,14 +15,14 @@ const btnSend: HTMLButtonElement = document.querySelector('#send');
 const showComs: HTMLButtonElement = document.querySelector('#show-coms');
 const showFavs: HTMLButtonElement = document.querySelector('#show-favs');
 
-// Получение данных об авторе, создание массива в LS, обновление комментариев и их кол-ва
+// Получение данных об авторе, создание массива в LS, обновление комментариев и их кол-ва, добавление в избранное
 tArea.createDataArr();
 tArea.CurrentPerson();
 tArea.updateComAmount();
 comment.setInitialRating();
 comment.updateCom();
-// favorites.addRemoveMark();
-// favorites.updateFavs();
+favorites.addRemoveMark();
+favorites.updateFavs();
 // sorting.showList();
 
 // Регулировка высоты, цвет кнопки, счетчик символов и добавление надписи
@@ -51,6 +51,7 @@ btnSend.addEventListener('click', function (): void {
 		tArea.updateComAmount();
 		comment.getDate();
 		comment.publishCom();
+		favorites.addRemoveMark();
 		area.value = '';
 		area.style.height = '62px';
 		btnSend.style.color = ' #00000060';
@@ -60,43 +61,42 @@ btnSend.addEventListener('click', function (): void {
 		).innerHTML = 'Макс. 1000 символов';
 		btnSend.innerHTML = 'Отправить';
 	}
-	// favorites.addRemoveMark();
 });
 
 // Просмотр избранного, изменение кнопки и убрать галочку (с выпадающего списка)
-// showFavs.addEventListener('click', (): void => {
-// 	favorites.showOnlyFavs();
-// 	if (window.getComputedStyle(showComs).fontSize === '20px') {
-// 		showFavs.classList.toggle('active-btn');
-// 		showFavs.parentElement.classList.toggle('active-block');
-// 		showComs.classList.toggle('active-btn');
-// 		showComs.parentElement.classList.toggle('active-block');
-// 	}
-// 	const removeMe: Element = document.querySelector('#remove-span');
-// 	document
-// 		.querySelector<HTMLButtonElement>('#show-list')
-// 		.setAttribute('how', 'idk');
-// 	removeMe ? removeMe.remove() : removeMe;
-// });
+showFavs.addEventListener('click', (): void => {
+	// favorites.showOnlyFavs();
+	if (window.getComputedStyle(showComs).fontSize === '20px') {
+		showFavs.classList.toggle('active-btn');
+		showFavs.parentElement.classList.toggle('active-block');
+		showComs.classList.toggle('active-btn');
+		showComs.parentElement.classList.toggle('active-block');
+	}
+	// const removeMe: Element = document.querySelector('#remove-span');
+	// document
+	// 	.querySelector<HTMLButtonElement>('#show-list')
+	// 	.setAttribute('how', 'idk');
+	// removeMe ? removeMe.remove() : removeMe;
+});
 
 // Просмотр всех комментариев (вернуться после избранного), изменение кнопки и убрать галочку
-// showComs.addEventListener('click', (): void => {
-// 	favorites.backToComs();
-// 	comment.updateCom();
-// 	favorites.updateFavs();
-// 	favorites.addRemoveMark();
-// 	if (window.getComputedStyle(showFavs).fontSize === '20px') {
-// 		showFavs.classList.toggle('active-btn');
-// 		showFavs.parentElement.classList.toggle('active-block');
-// 		showComs.classList.toggle('active-btn');
-// 		showComs.parentElement.classList.toggle('active-block');
-// 	}
-// 	const removeMe: Element = document.querySelector('#remove-span');
-// 	document
-// 		.querySelector<HTMLButtonElement>('#show-list')
-// 		.setAttribute('how', 'idk');
-// 	removeMe ? removeMe.remove() : removeMe;
-// });
+showComs.addEventListener('click', (): void => {
+	// favorites.backToComs();
+	// comment.updateCom();
+	// favorites.updateFavs();
+	// favorites.addRemoveMark();
+	if (window.getComputedStyle(showFavs).fontSize === '20px') {
+		showFavs.classList.toggle('active-btn');
+		showFavs.parentElement.classList.toggle('active-block');
+		showComs.classList.toggle('active-btn');
+		showComs.parentElement.classList.toggle('active-block');
+	}
+	// const removeMe: Element = document.querySelector('#remove-span');
+	// document
+	// 	.querySelector<HTMLButtonElement>('#show-list')
+	// 	.setAttribute('how', 'idk');
+	// removeMe ? removeMe.remove() : removeMe;
+});
 
 // Сколько места занято в LS (в консоль)
 // var _lsTotal=0,_xLen,_x;for(_x in localStorage){ if(!localStorage.hasOwnProperty(_x)){continue;} _xLen= ((localStorage[_x].length + _x.length)* 2);_lsTotal+=_xLen; console.log(_x.substr(0,50)+" = "+ (_xLen/1024).toFixed(2)+" KB")};console.log("Total = " + (_lsTotal / 1024).toFixed(2) + " KB");

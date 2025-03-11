@@ -2,45 +2,43 @@ export class Favorites {
 	// Добавить / убрать из избранного
 	public addRemoveMark(): void {
 		const favs: NodeListOf<Element> = document.querySelectorAll('#favs');
-		favs.forEach((el: Element): void => {
+
+		favs.forEach((el) => {
 			el.addEventListener('click', (): void => {
 				const num: string =
 					el.parentElement.parentElement.parentElement.getAttribute('num');
 				const respNum: string =
 					el.parentElement.parentElement.parentElement.getAttribute('respnum');
-				let favorites: string = localStorage.getItem('favs');
+				const favs: string[] = JSON.parse(localStorage.getItem('favorites'));
 				let result: string = '';
 				num ? (result = `num="${num}"`) : (result = `respnum="${respNum}"`);
 
 				if (el.childNodes[1].textContent === 'В избранное') {
 					el.innerHTML = `<img src="ImgForCommentSystem/filledHeart.svg" alt="*"><p>В избранном</p>`;
-					favorites
-						? localStorage.setItem(`favs`, `${favorites} ${result}`)
-						: localStorage.setItem(`favs`, `${result}`);
+					favs.push(result);
+					localStorage.setItem('favorites', JSON.stringify(favs));
 				} else {
 					el.innerHTML = `<img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p>`;
-					let newFavs: string = favorites
-						.split(' ')
-						.filter((el) => {
-							if (el != result) {
-								return el;
-							}
-						})
-						.join(' ');
-					localStorage.setItem('favs', newFavs);
+					let newFavs: string[] = favs.filter((elem) => {
+						if (elem !== result) {
+							return elem;
+						}
+					});
+					localStorage.setItem('favorites', JSON.stringify(newFavs));
 				}
 			});
 		});
 	}
 	// Избранные при обновлении
 	public updateFavs(): void {
-		const favs: string = localStorage.getItem('favs');
-		if (favs) {
-			favs.split(' ').forEach((el: string): void => {
-				let parentBlock: HTMLDivElement = document.querySelector(`[${el}]`);
-				parentBlock.querySelector(
-					'#favs'
-				).innerHTML = `<img src="ImgForCommentSystem/filledHeart.svg" alt="*"><p>В избранном</p>`;
+		const favs: string[] = JSON.parse(localStorage.getItem('favorites'));
+
+		if (favs.length > 0) {
+			favs.forEach((el: string): void => {
+				const parentBlock: HTMLDivElement = document.querySelector(`[${el}]`);
+				const btn: HTMLButtonElement = parentBlock.querySelector('#favs');
+
+				btn.innerHTML = `<img src="ImgForCommentSystem/filledHeart.svg" alt="*"><p>В избранном</p>`;
 			});
 		}
 	}

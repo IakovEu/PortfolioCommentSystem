@@ -85,7 +85,7 @@ export class Response {
 
 		comForResponse.insertAdjacentHTML(
 			'beforeend',
-			`<div class="response__created" respNum="${comClicked}">${top}${textBlock}${finalBot}</div>`
+			`<div class="response__created" respNum="${comClicked}-${pp}">${top}${textBlock}${finalBot}</div>`
 		);
 
 		this.changeRespRating('resp-plus', comClicked, pp, 'rgb(138, 197, 64)');
@@ -104,7 +104,7 @@ export class Response {
 		const responses: any[] = comments[ind].answers;
 
 		if (responses.length !== 0) {
-			responses.forEach((el, i): void => {
+			responses.forEach((el, i) => {
 				const respDate: string = el.date;
 				const userSrc = el.src;
 				const txt: string = el.txt;
@@ -134,7 +134,7 @@ export class Response {
 
 				comForResponse.insertAdjacentHTML(
 					'beforeend',
-					`<div class="response__created" respNum="${ind}">${top}${textBlock}${finalBot}</div>`
+					`<div class="response__created" respnum="${ind}-${i}">${top}${textBlock}${finalBot}</div>`
 				);
 
 				const pp = comForResponse.querySelector<HTMLParagraphElement>(
