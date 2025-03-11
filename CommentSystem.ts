@@ -23,7 +23,7 @@ comment.setInitialRating();
 comment.updateCom();
 favorites.addRemoveMark();
 favorites.updateFavs();
-// sorting.showList();
+sorting.showList();
 
 // Регулировка высоты, цвет кнопки, счетчик символов и добавление надписи
 area.addEventListener('input', function (): void {
