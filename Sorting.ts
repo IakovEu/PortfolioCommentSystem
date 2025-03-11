@@ -91,11 +91,34 @@ export class Sorting {
 				});
 			}
 		} else if (nextHow === 'По количеству оценок') {
-			const cA: number = +localStorage.getItem('commentsAmount');
-			const rA: number = +localStorage.getItem('respAmount');
+			const cA: number = document.querySelectorAll('.comment__created').length;
+			const allResps: NodeListOf<Element> =
+				document.querySelectorAll('.response__created');
 			const ratings: number[] = [];
-			this.ratingsToArr(ratings, cA, 'p');
-			this.ratingsToArr(ratings, rA, 'pp');
+
+			for (let i = 0; i <= cA - 1; i++) {
+				let r: number = +document.querySelector(`.p${i}`).textContent;
+				let pNum: HTMLParagraphElement = document.querySelector(`.p${i}`);
+
+				if (pNum.style.color === 'rgb(255, 0, 0)') {
+					pNum.setAttribute('rating', `${r * -1}`);
+					ratings.push(r * -1);
+				} else {
+					pNum.setAttribute('rating', `${r}`);
+					ratings.push(r);
+				}
+			}
+
+			allResps.forEach((el) => {
+				const pp: Element = el.children[2].children[1].children[1];
+				const r: number = +pp.textContent;
+				if (pp.getAttribute('style') === 'color: rgb(255, 0, 0);') {
+					pp.setAttribute('rating', `${r * -1}`);
+					ratings.push(r * -1);
+				} else pp.setAttribute('rating', `${r * -1}`);
+				ratings.push(r);
+			});
+
 			const sortRatings: number[] = ratings.sort((a, b) => b - a);
 			const allRatings: NodeListOf<Element> =
 				document.querySelectorAll('[rating]');
@@ -200,20 +223,6 @@ export class Sorting {
 					}
 				});
 			});
-		}
-	}
-	// Рейтинги в массив
-	private ratingsToArr(rat: number[], amount: number, p: string): void {
-		for (let i = 1; i <= amount; i++) {
-			let r: number = +document.querySelector(`.${p}${i}`).textContent;
-			let pNum: HTMLParagraphElement = document.querySelector(`.${p}${i}`);
-			if (pNum.style.color === 'rgb(255, 0, 0)') {
-				pNum.setAttribute('rating', `${r * -1}`);
-				rat.push(r * -1);
-			} else {
-				pNum.setAttribute('rating', `${r}`);
-				rat.push(r);
-			}
 		}
 	}
 	// Нода по тексту

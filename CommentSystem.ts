@@ -72,11 +72,11 @@ showFavs.addEventListener('click', (): void => {
 		showComs.classList.toggle('active-btn');
 		showComs.parentElement.classList.toggle('active-block');
 	}
-	// const removeMe: Element = document.querySelector('#remove-span');
-	// document
-	// 	.querySelector<HTMLButtonElement>('#show-list')s
-	// 	.setAttribute('how', 'idk');
-	// removeMe ? removeMe.remove() : removeMe;
+	const removeMe: Element = document.querySelector('#remove-span');
+	document
+		.querySelector<HTMLButtonElement>('#show-list')
+		.setAttribute('how', 'idk');
+	removeMe ? removeMe.remove() : removeMe;
 });
 
 // Просмотр всех комментариев (вернуться после избранного), изменение кнопки и убрать галочку
@@ -91,11 +91,11 @@ showComs.addEventListener('click', (): void => {
 		showComs.classList.toggle('active-btn');
 		showComs.parentElement.classList.toggle('active-block');
 	}
-	// const removeMe: Element = document.querySelector('#remove-span');
-	// document
-	// 	.querySelector<HTMLButtonElement>('#show-list')
-	// 	.setAttribute('how', 'idk');
-	// removeMe ? removeMe.remove() : removeMe;
+	const removeMe: Element = document.querySelector('#remove-span');
+	document
+		.querySelector<HTMLButtonElement>('#show-list')
+		.setAttribute('how', 'idk');
+	removeMe ? removeMe.remove() : removeMe;
 });
 
 // Сколько места занято в LS (в консоль)
