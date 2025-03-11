@@ -76,7 +76,7 @@ export class Response {
 		const pp: number = comments[comClicked].answers.length - 1;
 		const changeEstimateDiv = `<div class="publishCom__bottom-estimate">
 										<button class="publishCom__minus resp-minus">-</button>
-										<p class="pp${pp}">0</p>
+										<p class="pp${comClicked}-${pp}">0</p>
 										<button class="publishCom__plus resp-plus">+</button>
 									</div>`;
 		const changeBot: string = bot.slice(400, 610);
@@ -84,12 +84,12 @@ export class Response {
 		const finalBot = delBtn.replace(changeBot, changeEstimateDiv);
 
 		comForResponse.insertAdjacentHTML(
-			'afterend',
-			`<div class="response__created" respNum="${0}">${top}${textBlock}${finalBot}</div>`
+			'beforeend',
+			`<div class="response__created" respNum="${comClicked}">${top}${textBlock}${finalBot}</div>`
 		);
 
-		// this.changeRespRating('resp-plus', this.respCounter, 'rgb(138, 197, 64)');
-		// this.changeRespRating('resp-minus', this.respCounter, 'rgb(255, 0, 0)');
+		this.changeRespRating('resp-plus', comClicked, pp, 'rgb(138, 197, 64)');
+		this.changeRespRating('resp-minus', comClicked, pp, 'rgb(255, 0, 0)');
 	}
 	// Добавление ответов при перезагрузке
 	public updateResp(ind: number, bot: string): void {
@@ -100,15 +100,15 @@ export class Response {
 		const comForResponse: HTMLDivElement = document.querySelector(
 			`[num="${ind}"]`
 		);
+		const who = comments[ind].name;
 		const responses: any[] = comments[ind].answers;
 
 		if (responses.length !== 0) {
-			responses.forEach((el): void => {
+			responses.forEach((el, i): void => {
 				const respDate: string = el.date;
 				const userSrc = el.src;
 				const txt: string = el.txt;
 				const respName = el.name;
-				const who = comments[ind].name;
 				const getRating = el.rating;
 
 				const top = `<div class="publishCom__top">
@@ -127,58 +127,70 @@ export class Response {
 
 				const changeEstimateDiv = `<div class="publishCom__bottom-estimate">
 												<button class="publishCom__minus resp-minus">-</button>
-												<p class="pp${0}">${getRating}</p>
+												<p class="pp${ind}-${i}">${getRating}</p>
 												<button class="publishCom__plus resp-plus">+</button>
 											</div>`;
 				const finalBot = delBtn.replace(changeBot, changeEstimateDiv);
 
 				comForResponse.insertAdjacentHTML(
-					'afterend',
-					`<div class="response__created" respNum="${el}">${top}${textBlock}${finalBot}</div>`
+					'beforeend',
+					`<div class="response__created" respNum="${ind}">${top}${textBlock}${finalBot}</div>`
 				);
 
-				// if (getRating < 0 ) {
-				// 	document.querySelector<HTMLParagraphElement>(`.pp${el}`).style.color =
-				// 		'rgb(255, 0, 0)';
-				// 	const minusWithoutMinus: number =
-				// 		+document.querySelector(`.pp${el}`).textContent * -1;
-				// 	document.querySelector(`.pp${el}`).innerHTML = `${minusWithoutMinus}`;
-				// } else {
-				// 	document.querySelector<HTMLParagraphElement>(`.pp${el}`).style.color =
-				// 		'rgb(138, 197, 64)';
-				// }
-				// localStorage.setItem(`initialRespRating${el}`, `${getRating}`);
-				// this.changeRespRating('resp-plus', +el, 'rgb(138, 197, 64)');
-				// this.changeRespRating('resp-minus', +el, 'rgb(255, 0, 0)');
+				const pp = comForResponse.querySelector<HTMLParagraphElement>(
+					`.pp${ind}-${i}`
+				);
+				if (getRating < 0) {
+					pp.style.color = 'rgb(255, 0, 0)';
+					const minusWithoutMinus: number = +pp.textContent * -1;
+					pp.innerHTML = `${minusWithoutMinus}`;
+				} else {
+					pp.style.color = 'rgb(138, 197, 64)';
+				}
+
+				this.changeRespRating('resp-plus', ind, i, 'rgb(138, 197, 64)');
+				this.changeRespRating('resp-minus', ind, i, 'rgb(255, 0, 0)');
 			});
 		}
 	}
 	// Изменение рейтинга комментариев (отрицательный-красный, положительный-зеленый);
-	private changeRespRating(btn: string, ind: number, clr: string): void {
-		document
-			.querySelector<HTMLButtonElement>(`.${btn}`)
-			.addEventListener('click', () => {
-				const pNum: HTMLParagraphElement = document.querySelector(`.pp${ind}`);
-				const currentRating: number = +pNum.textContent;
-				const cR: number = +localStorage.getItem(`initialRespRating${ind}`);
+	private changeRespRating(
+		btn: string,
+		ind: number,
+		i: number,
+		clr: string
+	): void {
+		const allBtns: NodeListOf<Element> = document.querySelectorAll(`.${btn}`);
 
-				if (cR == currentRating || cR == currentRating * -1) {
-					if (
-						window.getComputedStyle(pNum).color === clr ||
-						currentRating == 0
-					) {
-						pNum.style.color = `${clr}`;
-						pNum.innerHTML = `${currentRating + 1}`;
-					} else {
-						pNum.innerHTML = `${currentRating - 1}`;
-					}
-					if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
-						const setRating: number = +pNum.textContent; // Она тут не случайно, с currentRating не работает
-						localStorage.setItem(`respRating${ind}`, `${setRating * -1}`);
-					} else {
-						localStorage.setItem(`respRating${ind}`, pNum.textContent);
+		allBtns.forEach((el, ix) => {
+			el.addEventListener('click', (): void => {
+				if (ix === i) {
+					const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+					const answers: any[] = comments[ind].answers;
+					const pNum: HTMLParagraphElement = document.querySelector(
+						`.pp${ind}-${i}`
+					);
+					let currentRating: number = +pNum.textContent;
+					const initialR: number = answers[i].ratingToCompare;
+					if (initialR == currentRating || initialR === currentRating * -1) {
+						if (
+							window.getComputedStyle(pNum).color === clr ||
+							currentRating === 0
+						) {
+							pNum.style.color = `${clr}`;
+							pNum.innerHTML = `${currentRating + 1}`;
+						} else {
+							pNum.innerHTML = `${currentRating - 1}`;
+						}
+						if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
+							answers[i].rating = +pNum.textContent * -1;
+						} else {
+							answers[i].rating = +pNum.textContent;
+						}
+						localStorage.setItem('comments', JSON.stringify(comments));
 					}
 				}
 			});
+		});
 	}
 }

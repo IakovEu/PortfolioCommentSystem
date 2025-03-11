@@ -117,9 +117,15 @@ export class Comment {
 		if (comments.length > 0) {
 			for (let i = 0; i <= comments.length - 1; i++) {
 				comments[i].ratingToCompare = comments[i].rating;
-				localStorage.setItem('comments', JSON.stringify(comments));
+				const answ: any[] = comments[i].answers;
+				if (answ.length > 0) {
+					for (let y = 0; y <= answ.length - 1; y++) {
+						answ[y].ratingToCompare = answ[y].rating;
+					}
+				}
 			}
 		}
+		localStorage.setItem('comments', JSON.stringify(comments));
 	}
 	// Изменение рейтинга (отрицательный-красный, положительный-зеленый);
 	private changeRating(btn: string, ind: number, clr: string): void {
@@ -178,7 +184,7 @@ export class Comment {
 			comments[cA].date = currentDate;
 			localStorage.setItem('comments', JSON.stringify(comments));
 		} else {
-			localStorage.setItem('currentDate', currentDate)
+			localStorage.setItem('currentDate', currentDate);
 		}
 	}
 }
