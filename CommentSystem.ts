@@ -65,7 +65,7 @@ btnSend.addEventListener('click', function (): void {
 
 // Просмотр избранного, изменение кнопки и убрать галочку (с выпадающего списка)
 showFavs.addEventListener('click', (): void => {
-	// favorites.showOnlyFavs();
+	favorites.showOnlyFavs();
 	if (window.getComputedStyle(showComs).fontSize === '20px') {
 		showFavs.classList.toggle('active-btn');
 		showFavs.parentElement.classList.toggle('active-block');
@@ -74,17 +74,17 @@ showFavs.addEventListener('click', (): void => {
 	}
 	// const removeMe: Element = document.querySelector('#remove-span');
 	// document
-	// 	.querySelector<HTMLButtonElement>('#show-list')
+	// 	.querySelector<HTMLButtonElement>('#show-list')s
 	// 	.setAttribute('how', 'idk');
 	// removeMe ? removeMe.remove() : removeMe;
 });
 
 // Просмотр всех комментариев (вернуться после избранного), изменение кнопки и убрать галочку
 showComs.addEventListener('click', (): void => {
-	// favorites.backToComs();
-	// comment.updateCom();
-	// favorites.updateFavs();
-	// favorites.addRemoveMark();
+	favorites.backToComs();
+	comment.updateCom();
+	favorites.updateFavs();
+	favorites.addRemoveMark();
 	if (window.getComputedStyle(showFavs).fontSize === '20px') {
 		showFavs.classList.toggle('active-btn');
 		showFavs.parentElement.classList.toggle('active-block');

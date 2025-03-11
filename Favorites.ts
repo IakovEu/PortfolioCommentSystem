@@ -2,7 +2,7 @@ export class Favorites {
 	// Добавить / убрать из избранного
 	public addRemoveMark(): void {
 		const favs: NodeListOf<Element> = document.querySelectorAll('#favs');
-
+		
 		favs.forEach((el) => {
 			el.addEventListener('click', (): void => {
 				const num: string =
@@ -44,7 +44,7 @@ export class Favorites {
 	}
 	// Показать только избранные
 	public showOnlyFavs(): void {
-		const favs: string = localStorage.getItem('favs');
+		const favs: string[] = JSON.parse(localStorage.getItem('favorites'));
 		const allComs: NodeListOf<Element> =
 			document.querySelectorAll('.comment__created');
 		const allResps: NodeListOf<Element> =
@@ -54,8 +54,8 @@ export class Favorites {
 		const comOnlyFavs: string[] = [];
 		const respOnlyFavs: string[] = [];
 
-		if (favs) {
-			favs.split(' ').forEach((el: string): void => {
+		if (favs.length > 0) {
+			favs.forEach((el: string): void => {
 				allComs.forEach((com: Element): void => {
 					let num = com.getAttribute('num');
 					if (`num="${num}"` === el) {

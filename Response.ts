@@ -84,7 +84,7 @@ export class Response {
 		const finalBot = delBtn.replace(changeBot, changeEstimateDiv);
 
 		comForResponse.insertAdjacentHTML(
-			'beforeend',
+			'afterend',
 			`<div class="response__created" respNum="${comClicked}-${pp}">${top}${textBlock}${finalBot}</div>`
 		);
 
@@ -133,11 +133,11 @@ export class Response {
 				const finalBot = delBtn.replace(changeBot, changeEstimateDiv);
 
 				comForResponse.insertAdjacentHTML(
-					'beforeend',
+					'afterend',
 					`<div class="response__created" respnum="${ind}-${i}">${top}${textBlock}${finalBot}</div>`
 				);
 
-				const pp = comForResponse.querySelector<HTMLParagraphElement>(
+				const pp = document.querySelector<HTMLParagraphElement>(
 					`.pp${ind}-${i}`
 				);
 				if (getRating < 0) {
@@ -160,37 +160,34 @@ export class Response {
 		i: number,
 		clr: string
 	): void {
-		const allBtns: NodeListOf<Element> = document.querySelectorAll(`.${btn}`);
+		const action: HTMLButtonElement = document.querySelector(`.${btn}`);
 
-		allBtns.forEach((el, ix) => {
-			el.addEventListener('click', (): void => {
-				if (ix === i) {
-					const comments: any[] = JSON.parse(localStorage.getItem('comments'));
-					const answers: any[] = comments[ind].answers;
-					const pNum: HTMLParagraphElement = document.querySelector(
-						`.pp${ind}-${i}`
-					);
-					let currentRating: number = +pNum.textContent;
-					const initialR: number = answers[i].ratingToCompare;
-					if (initialR == currentRating || initialR === currentRating * -1) {
-						if (
-							window.getComputedStyle(pNum).color === clr ||
-							currentRating === 0
-						) {
-							pNum.style.color = `${clr}`;
-							pNum.innerHTML = `${currentRating + 1}`;
-						} else {
-							pNum.innerHTML = `${currentRating - 1}`;
-						}
-						if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
-							answers[i].rating = +pNum.textContent * -1;
-						} else {
-							answers[i].rating = +pNum.textContent;
-						}
-						localStorage.setItem('comments', JSON.stringify(comments));
-					}
+		action.addEventListener('click', (): void => {
+			const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+			const answers: any[] = comments[ind].answers;
+			const pNum: HTMLParagraphElement = document.querySelector(
+				`.pp${ind}-${i}`
+			);
+
+			let currentRating: number = +pNum.textContent;
+			const initialR: number = answers[i].ratingToCompare;
+			if (initialR == currentRating || initialR === currentRating * -1) {
+				if (
+					window.getComputedStyle(pNum).color === clr ||
+					currentRating === 0
+				) {
+					pNum.style.color = `${clr}`;
+					pNum.innerHTML = `${currentRating + 1}`;
+				} else {
+					pNum.innerHTML = `${currentRating - 1}`;
 				}
-			});
+				if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
+					answers[i].rating = +pNum.textContent * -1;
+				} else {
+					answers[i].rating = +pNum.textContent;
+				}
+				localStorage.setItem('comments', JSON.stringify(comments));
+			}
 		});
 	}
 }
