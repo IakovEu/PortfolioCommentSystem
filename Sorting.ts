@@ -115,8 +115,10 @@ export class Sorting {
 				if (pp.getAttribute('style') === 'color: rgb(255, 0, 0);') {
 					pp.setAttribute('rating', `${r * -1}`);
 					ratings.push(r * -1);
-				} else pp.setAttribute('rating', `${r * -1}`);
-				ratings.push(r);
+				} else {
+					pp.setAttribute('rating', `${r}`);
+					ratings.push(r);
+				}
 			});
 
 			const sortRatings: number[] = ratings.sort((a, b) => b - a);
