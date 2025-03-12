@@ -10,11 +10,17 @@ const comment = new Comment();
 const response = new Response();
 const favorites = new Favorites();
 
-const area: HTMLTextAreaElement = document.querySelector('#comment');
-const btnSend: HTMLButtonElement = document.querySelector('#send');
-const showComs: HTMLButtonElement = document.querySelector('#show-coms');
-const showFavs: HTMLButtonElement = document.querySelector('#show-favs');
-const list: HTMLDivElement = document.querySelector('.comments__list');
+const area: HTMLTextAreaElement = document.querySelector('#comment')!;
+const btnSend: HTMLButtonElement = document.querySelector('#send')!;
+const btnList: HTMLButtonElement = document.querySelector('#show-list')!;
+const showComs: HTMLButtonElement = document.querySelector('#show-coms')!;
+const comsBlock: HTMLElement = showComs.parentElement!;
+const showFavs: HTMLButtonElement = document.querySelector('#show-favs')!;
+const favsBlock: HTMLElement = showFavs.parentElement!;
+const list: HTMLDivElement = document.querySelector('.comments__list')!;
+const maxSymbols: HTMLSpanElement = document.querySelector(
+	'.comments__insert-span2'
+)!;
 
 // Получение данных об авторе, создание массива в LS, обновление комментариев и их кол-ва, добавление и обновление избранного и выпадающий список
 tArea.createDataArr();
@@ -57,9 +63,7 @@ btnSend.addEventListener('click', function (): void {
 		area.style.height = '62px';
 		btnSend.style.color = ' #00000060';
 		btnSend.style.backgroundColor = '#A1A1A1';
-		document.querySelector<HTMLSpanElement>(
-			'.comments__insert-span2'
-		).innerHTML = 'Макс. 1000 символов';
+		maxSymbols.innerHTML = 'Макс. 1000 символов';
 		btnSend.innerHTML = 'Отправить';
 	}
 });
@@ -69,14 +73,12 @@ showFavs.addEventListener('click', (): void => {
 	favorites.showOnlyFavs();
 	if (window.getComputedStyle(showComs).fontSize === '20px') {
 		showFavs.classList.toggle('active-btn');
-		showFavs.parentElement.classList.toggle('active-block');
+		favsBlock.classList.toggle('active-block');
 		showComs.classList.toggle('active-btn');
-		showComs.parentElement.classList.toggle('active-block');
+		comsBlock.classList.toggle('active-block');
 	}
-	const removeMe: Element = document.querySelector('#remove-span');
-	document
-		.querySelector<HTMLButtonElement>('#show-list')
-		.setAttribute('how', 'idk');
+	const removeMe: Element | null = document.querySelector('#remove-span');
+	btnList.setAttribute('how', 'idk');
 	removeMe ? removeMe.remove() : removeMe;
 	list.classList.remove('active');
 });
@@ -89,14 +91,12 @@ showComs.addEventListener('click', (): void => {
 	favorites.addRemoveMark();
 	if (window.getComputedStyle(showFavs).fontSize === '20px') {
 		showFavs.classList.toggle('active-btn');
-		showFavs.parentElement.classList.toggle('active-block');
+		favsBlock.classList.toggle('active-block');
 		showComs.classList.toggle('active-btn');
-		showComs.parentElement.classList.toggle('active-block');
+		comsBlock.classList.toggle('active-block');
 	}
-	const removeMe: Element = document.querySelector('#remove-span');
-	document
-		.querySelector<HTMLButtonElement>('#show-list')
-		.setAttribute('how', 'idk');
+	const removeMe: Element | null = document.querySelector('#remove-span');
+	btnList.setAttribute('how', 'idk');
 	removeMe ? removeMe.remove() : removeMe;
 	list.classList.remove('active');
 });

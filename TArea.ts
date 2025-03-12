@@ -6,7 +6,7 @@ export class TArea {
 	}
 	// Цвет кнопки
 	public btnColor(el?: HTMLTextAreaElement): void {
-		const btn: HTMLButtonElement = document.querySelector('#send');
+		const btn: HTMLButtonElement = document.querySelector('#send')!;
 		if (el) {
 			btn.style.color = '#000000';
 			btn.style.backgroundColor = '#ABD873';
@@ -19,7 +19,7 @@ export class TArea {
 	public symbolCounter(el?: HTMLTextAreaElement): void {
 		const symbols: HTMLSpanElement = document.querySelector(
 			'.comments__insert-span2'
-		);
+		)!;
 		if (el) {
 			symbols.innerHTML = `${el.value.length}/1000`;
 		} else {
@@ -33,7 +33,7 @@ export class TArea {
 		);
 		const symbols: HTMLSpanElement = document.querySelector(
 			'.comments__insert-span2'
-		);
+		)!;
 		additional.innerHTML = '';
 		if (el.value.length > 1000) {
 			additional.insertAdjacentText('beforeend', 'Слишком длинное сообщение');
@@ -54,7 +54,7 @@ export class TArea {
 	}
 	// Добавление информации о комментах в локал сторейдж
 	public saveToLocal(): void {
-		const btnSend: HTMLButtonElement = document.querySelector('#send');
+		const btnSend: HTMLButtonElement = document.querySelector('#send')!;
 		const area: HTMLTextAreaElement = document.querySelector('#comment');
 
 		if (
@@ -92,7 +92,7 @@ export class TArea {
 	// Обновление кол-ва комментариев
 	updateComAmount() {
 		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
-		const btn: HTMLButtonElement = document.querySelector('#send');
+		const btn: HTMLButtonElement = document.querySelector('#send')!;
 		if (btn.textContent === 'Отправить' && comments.length !== 0) {
 			const amount = document.querySelector('.comments__amount');
 			amount.innerHTML = `(${comments.length})`;

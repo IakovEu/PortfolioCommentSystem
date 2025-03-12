@@ -57,6 +57,7 @@ export class Sorting {
 			document.querySelectorAll('.response__created');
 
 		if (nextHow === 'По дате') {
+			this.showListBtn.innerHTML = 'По дате';
 			dateToSort.forEach((el: Element): void => {
 				comsAndResps.push(el.textContent);
 			});
@@ -91,6 +92,7 @@ export class Sorting {
 				});
 			}
 		} else if (nextHow === 'По количеству оценок') {
+			this.showListBtn.innerHTML = 'По количеству оценок';
 			const cA: number = document.querySelectorAll('.comment__created').length;
 			const allResps: NodeListOf<Element> =
 				document.querySelectorAll('.response__created');
@@ -147,8 +149,10 @@ export class Sorting {
 				});
 			}
 		} else if (nextHow === 'По актуальности') {
+			this.showListBtn.innerHTML = 'По актуальности';
 			alert('Все комментарии актуальны!');
 		} else {
+			this.showListBtn.innerHTML = 'По количеству ответов';
 			const allResps: NodeListOf<Element> = document.querySelectorAll(
 				'.publishCom__answered'
 			);
