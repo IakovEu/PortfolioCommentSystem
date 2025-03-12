@@ -14,8 +14,9 @@ const area: HTMLTextAreaElement = document.querySelector('#comment');
 const btnSend: HTMLButtonElement = document.querySelector('#send');
 const showComs: HTMLButtonElement = document.querySelector('#show-coms');
 const showFavs: HTMLButtonElement = document.querySelector('#show-favs');
+const list: HTMLDivElement = document.querySelector('.comments__list');
 
-// Получение данных об авторе, создание массива в LS, обновление комментариев и их кол-ва, добавление в избранное
+// Получение данных об авторе, создание массива в LS, обновление комментариев и их кол-ва, добавление и обновление избранного и выпадающий список
 tArea.createDataArr();
 tArea.CurrentPerson();
 tArea.updateComAmount();
@@ -77,6 +78,7 @@ showFavs.addEventListener('click', (): void => {
 		.querySelector<HTMLButtonElement>('#show-list')
 		.setAttribute('how', 'idk');
 	removeMe ? removeMe.remove() : removeMe;
+	list.classList.remove('active');
 });
 
 // Просмотр всех комментариев (вернуться после избранного), изменение кнопки и убрать галочку
@@ -96,6 +98,7 @@ showComs.addEventListener('click', (): void => {
 		.querySelector<HTMLButtonElement>('#show-list')
 		.setAttribute('how', 'idk');
 	removeMe ? removeMe.remove() : removeMe;
+	list.classList.remove('active');
 });
 
 // Сколько места занято в LS (в консоль)
