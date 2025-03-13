@@ -229,18 +229,11 @@ export class Sorting {
 				});
 			}
 			respDivs.forEach((r) => {
-				let answered: Element | undefined =
-					r.children[0].children[0].children[2];
+				const respNum: number = +r.getAttribute('respnum')!.split('-')[0];
 				allComs.forEach((el) => {
-					let userName: string =
-						el.children[0].children[0].children[1].textContent!;
-
-					if (answered !== undefined) {
-						if (answered.children[1].textContent === userName) {
-							el.after(r);
-						}
-					} else {
-						console.log(r);
+					const num: number = +el.getAttribute('num')!;
+					if (respNum === num) {
+						el.after(r);
 					}
 				});
 			});
