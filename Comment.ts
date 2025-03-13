@@ -2,15 +2,15 @@ import { Response } from './Response.js';
 // Строки с тэгами не выношу в конфиг, чтобы все видеть и не путаться!
 export class Comment {
 	response = new Response();
-	parentBlock: HTMLDivElement = document.querySelector('.comments__insert');
+	parentBlock: HTMLDivElement = document.querySelector('.comments__insert')!;
 
 	// Создание комментария / ответа (новые сверху)
 	public publishCom(): void {
-		const btnSend: HTMLButtonElement = document.querySelector('#send');
-		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+		const btnSend: HTMLButtonElement = document.querySelector('#send')!;
+		const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
 		const cA: number = comments.length - 1;
-		const userSrc: string = localStorage.getItem('currentUserSrc');
-		const userName: string = localStorage.getItem('currentUserName');
+		const userSrc: string | null = localStorage.getItem('currentUserSrc');
+		const userName: string | null = localStorage.getItem('currentUserName');
 		const userDate: string = comments[cA].date;
 		const txt: string = comments[cA].txt;
 
@@ -45,25 +45,24 @@ export class Comment {
 			);
 			this.changeRating('publishCom__plus', cA, 'rgb(138, 197, 64)');
 			this.changeRating('publishCom__minus', cA, 'rgb(255, 0, 0)');
-			this.response.renameBtn(cA);
 		} else {
 			this.response.publishResponse(bottomBtns);
 		}
+		this.response.renameBtn(cA);
 	}
 	// Добавление комментов при перезагрузке
 	public updateCom(): void {
-		const btnSend: HTMLButtonElement = document.querySelector('#send');
-		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+		const btnSend: HTMLButtonElement = document.querySelector('#send')!;
+		const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
 		const cA: number = comments.length;
 
 		if (cA > 0) {
 			for (let i: number = 0; i <= cA - 1; i++) {
-				let getRating: number = comments[i].rating;
+				const getRating: number = comments[i].rating;
 				const userName: string = comments[i].name;
 				const userSrc: string = comments[i].src;
 				const userDate: string = comments[i].date;
 				const txt: string = comments[i].txt;
-
 				const top: string = `<div class="publishCom__top">
 									<div class="comments__insert-photo">
 										<img src="${userSrc}" alt="*">
@@ -94,14 +93,22 @@ export class Comment {
 				);
 
 				if (getRating < 0) {
-					document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
-						'rgb(255, 0, 0)';
-					const minusWithoutMinus: number =
-						+document.querySelector(`.p${i}`).textContent * -1;
-					document.querySelector(`.p${i}`).innerHTML = `${minusWithoutMinus}`;
+					const p: HTMLParagraphElement | null = document.querySelector(
+						`.p${i}`
+					);
+					if (p !== null) {
+						p.style.color = 'rgb(255, 0, 0)';
+						const x: number = +p.textContent!;
+						const minusWithoutMinus: number = x * -1;
+						p.innerHTML = `${minusWithoutMinus}`;
+					}
 				} else {
-					document.querySelector<HTMLParagraphElement>(`.p${i}`).style.color =
-						'rgb(138, 197, 64)';
+					const p: HTMLParagraphElement | null = document.querySelector(
+						`.p${i}`
+					);
+					if (p !== null) {
+						p.style.color = 'rgb(138, 197, 64)';
+					}
 				}
 				this.changeRating('publishCom__plus', i, 'rgb(138, 197, 64)');
 				this.changeRating('publishCom__minus', i, 'rgb(255, 0, 0)');
@@ -113,7 +120,7 @@ export class Comment {
 	}
 	// Установка изначального рейтинга для сравнения
 	public setInitialRating(): void {
-		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+		const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
 		if (comments.length > 0) {
 			for (let i = 0; i <= comments.length - 1; i++) {
 				comments[i].ratingToCompare = comments[i].rating;
@@ -129,37 +136,40 @@ export class Comment {
 	}
 	// Изменение рейтинга (отрицательный-красный, положительный-зеленый);
 	private changeRating(btn: string, ind: number, clr: string): void {
-		document
-			.querySelector<HTMLButtonElement>(`.${btn}`)
-			.addEventListener('click', (): void => {
-				const comments: any[] = JSON.parse(localStorage.getItem('comments'));
-				const pNum: HTMLParagraphElement = document.querySelector(`.p${ind}`);
-				let currentRating: number = +pNum.textContent;
-				const initialR: number = comments[ind].ratingToCompare;
+		const button: HTMLButtonElement = document.querySelector(`.${btn}`)!;
 
-				if (initialR == currentRating || initialR === currentRating * -1) {
-					if (
-						window.getComputedStyle(pNum).color === clr ||
-						currentRating === 0
-					) {
-						pNum.style.color = `${clr}`;
-						pNum.innerHTML = `${currentRating + 1}`;
-					} else {
-						pNum.innerHTML = `${currentRating - 1}`;
-					}
+		button.addEventListener('click', (): void => {
+			const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
+			const pNum: HTMLParagraphElement = document.querySelector(`.p${ind}`)!;
+			let currentRating: number = +pNum.textContent!;
+			const initialR: number = comments[ind].ratingToCompare;
 
-					if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
-						comments[ind].rating = +pNum.textContent * -1;
-					} else {
-						comments[ind].rating = +pNum.textContent;
-					}
-					localStorage.setItem('comments', JSON.stringify(comments));
+			if (initialR == currentRating || initialR === currentRating * -1) {
+				if (
+					window.getComputedStyle(pNum).color === clr ||
+					currentRating === 0
+				) {
+					pNum.style.color = `${clr}`;
+					pNum.innerHTML = `${currentRating + 1}`;
+				} else {
+					pNum.innerHTML = `${currentRating - 1}`;
 				}
-			});
+
+				if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
+					comments[ind].rating = +pNum.textContent! * -1;
+				} else {
+					comments[ind].rating = +pNum.textContent!;
+				}
+				localStorage.setItem('comments', JSON.stringify(comments));
+			}
+		});
 	}
 	// Получение текущих даты и времени
 	public getDate(): void {
-		const months = {
+		type z = {
+			[key: string]: string;
+		};
+		const months: z = {
 			Jan: '01',
 			Feb: '02',
 			Mar: '03',
@@ -176,9 +186,9 @@ export class Comment {
 
 		const date = `${new Date()}`.split(' ');
 		const currentDate = `${months[date[1]]}.${date[2]} ${date[4].slice(0, 5)}`;
-		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+		const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
 		const cA: number = comments.length - 1;
-		const btnSend: HTMLButtonElement = document.querySelector('#send');
+		const btnSend: HTMLButtonElement = document.querySelector('#send')!;
 
 		if (btnSend.textContent == 'Отправить') {
 			comments[cA].date = currentDate;

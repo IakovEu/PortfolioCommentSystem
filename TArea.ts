@@ -30,22 +30,24 @@ export class TArea {
 	public addToLong(el?: HTMLTextAreaElement): void {
 		const additional: HTMLDivElement = document.querySelector(
 			'.comments__insert-additional'
-		);
+		)!;
 		const symbols: HTMLSpanElement = document.querySelector(
 			'.comments__insert-span2'
 		)!;
 		additional.innerHTML = '';
-		if (el.value.length > 1000) {
-			additional.insertAdjacentText('beforeend', 'Слишком длинное сообщение');
-			symbols.style.color = '#FF0000';
-		} else {
-			symbols.style.color = '#00000060';
+		if (el !== undefined) {
+			if (el.value.length > 1000) {
+				additional.insertAdjacentText('beforeend', 'Слишком длинное сообщение');
+				symbols.style.color = '#FF0000';
+			} else {
+				symbols.style.color = '#00000060';
+			}
 		}
 	}
 	// Создание массива для всей инфы
 	public createDataArr(): void {
-		const comments: string = localStorage.getItem('comments');
-		const favorites: string = localStorage.getItem('favorites');
+		const comments: string | null = localStorage.getItem('comments');
+		const favorites: string | null = localStorage.getItem('favorites');
 		if (comments === null) {
 			localStorage.setItem('comments', JSON.stringify([]));
 		} else if (favorites === null) {
@@ -55,7 +57,7 @@ export class TArea {
 	// Добавление информации о комментах в локал сторейдж
 	public saveToLocal(): void {
 		const btnSend: HTMLButtonElement = document.querySelector('#send')!;
-		const area: HTMLTextAreaElement = document.querySelector('#comment');
+		const area: HTMLTextAreaElement = document.querySelector('#comment')!;
 
 		if (
 			area.value.trim() &&
@@ -64,8 +66,8 @@ export class TArea {
 		) {
 			if (btnSend.textContent === 'Отправить') {
 				type x = {
-					name: string;
-					src: string;
+					name: string | null;
+					src: string | null;
 					txt: string;
 					date: string;
 					rating: number;
@@ -82,7 +84,9 @@ export class TArea {
 					answers: [],
 				};
 
-				const allComs: object[] = JSON.parse(localStorage.getItem('comments'));
+				const allComs: unknown[] = JSON.parse(
+					localStorage.getItem('comments')!
+				);
 				allComs.push(com);
 
 				localStorage.setItem('comments', JSON.stringify(allComs));
@@ -90,11 +94,11 @@ export class TArea {
 		}
 	}
 	// Обновление кол-ва комментариев
-	updateComAmount() {
-		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+	public updateComAmount() {
+		const comments: unknown[] = JSON.parse(localStorage.getItem('comments')!);
 		const btn: HTMLButtonElement = document.querySelector('#send')!;
 		if (btn.textContent === 'Отправить' && comments.length !== 0) {
-			const amount = document.querySelector('.comments__amount');
+			const amount = document.querySelector('.comments__amount')!;
 			amount.innerHTML = `(${comments.length})`;
 		}
 	}
@@ -106,9 +110,9 @@ export class TArea {
 			})
 			.then((res): void => {
 				const firstAndLast = `${res.results[0].name.first} ${res.results[0].name.last}`;
-				const photo = document.querySelector<HTMLImageElement>('#currentPhoto');
-				document.querySelector<HTMLSpanElement>('#currentUser').innerHTML =
-					firstAndLast;
+				const photo: HTMLImageElement = document.querySelector('#currentPhoto')!;
+				const user: HTMLSpanElement = document.querySelector('#currentUser')!;
+				user.innerHTML = firstAndLast;
 				photo.src = res.results[0].picture.thumbnail;
 				photo.style.animation = 'none';
 				photo.style.border = 'none';

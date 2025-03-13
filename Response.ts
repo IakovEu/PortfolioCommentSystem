@@ -2,43 +2,49 @@ export class Response {
 	// Я вызываю эти функции в классе Comment
 	// Изменение кнопки отправки, перемещение к ней и событие на каждую кнопку ответа (нажали, написали в обычное поле ввода и ответили)
 	public renameBtn(ind: number): void {
-		const response: HTMLButtonElement = document.querySelector('.response');
+		const afterClick: HTMLDivElement = document.querySelector(
+			'.comments__top-btns'
+		)!;
+		const response: HTMLButtonElement | null =
+			document.querySelector('.response');
 
-		response.addEventListener('click', () => {
-			const comments: any[] = JSON.parse(localStorage.getItem('comments'));
-			const btnSend: HTMLButtonElement = document.querySelector('#send');
-			const comClicked: number =
-				+response.parentElement.parentElement.parentElement.getAttribute('num');
+		if (response !== null) {
+			response.addEventListener('click', () => {
+				const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
+				const btnSend: HTMLButtonElement = document.querySelector('#send')!;
+				const comClicked: number =
+					+response.parentElement!.parentElement!.parentElement!.getAttribute(
+						'num'
+					)!;
 
-			btnSend.innerHTML = `Ответить ${comments[ind].name}`;
+				btnSend.innerHTML = `Ответить ${comments[ind].name}`;
 
-			document
-				.querySelector<HTMLDivElement>('.comments__top-btns')
-				.scrollIntoView({
+				afterClick.scrollIntoView({
 					behavior: 'smooth',
 					block: 'start',
 				});
 
-			localStorage.setItem('comClicked', `${comClicked}`);
-		});
+				localStorage.setItem('comClicked', `${comClicked}`);
+			});
+		}
 	}
 	// Создание ответа на комментарий
 	public publishResponse(bot: string): void {
-		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
-		const area: HTMLTextAreaElement = document.querySelector('#comment');
-		const userSrc: string = localStorage.getItem('currentUserSrc');
-		const userName: string = localStorage.getItem('currentUserName');
-		const currentDate: string = localStorage.getItem('currentDate');
-		const comClicked: number = +localStorage.getItem('comClicked');
+		const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
+		const area: HTMLTextAreaElement = document.querySelector('#comment')!;
+		const userSrc: string | null = localStorage.getItem('currentUserSrc');
+		const userName: string | null = localStorage.getItem('currentUserName');
+		const currentDate: string = localStorage.getItem('currentDate')!;
+		const comClicked: number = +localStorage.getItem('comClicked')!;
 		const who: string = comments[comClicked].name;
 		const comForResponse: HTMLDivElement = document.querySelector(
 			`[num="${comClicked}"]`
-		);
+		)!;
 
 		comments.forEach((el, ind) => {
 			type y = {
-				name: string;
-				src: string;
+				name: string | null;
+				src: string | null;
 				txt: string;
 				date: string;
 				rating: number;
@@ -93,13 +99,13 @@ export class Response {
 	}
 	// Добавление ответов при перезагрузке
 	public updateResp(ind: number, bot: string): void {
-		const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+		const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
 		const del: string = bot.slice(40, 225);
 		const delBtn = bot.replace(del, '');
 		const changeBot: string = bot.slice(410, 620);
 		const comForResponse: HTMLDivElement = document.querySelector(
 			`[num="${ind}"]`
-		);
+		)!;
 		const who = comments[ind].name;
 		const responses: any[] = comments[ind].answers;
 
@@ -139,10 +145,10 @@ export class Response {
 
 				const pp = document.querySelector<HTMLParagraphElement>(
 					`.pp${ind}-${i}`
-				);
+				)!;
 				if (getRating < 0) {
 					pp.style.color = 'rgb(255, 0, 0)';
-					const minusWithoutMinus: number = +pp.textContent * -1;
+					const minusWithoutMinus: number = +pp.textContent! * -1;
 					pp.innerHTML = `${minusWithoutMinus}`;
 				} else {
 					pp.style.color = 'rgb(138, 197, 64)';
@@ -160,16 +166,16 @@ export class Response {
 		i: number,
 		clr: string
 	): void {
-		const action: HTMLButtonElement = document.querySelector(`.${btn}`);
+		const action: HTMLButtonElement = document.querySelector(`.${btn}`)!;
 
 		action.addEventListener('click', (): void => {
-			const comments: any[] = JSON.parse(localStorage.getItem('comments'));
+			const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
 			const answers: any[] = comments[ind].answers;
 			const pNum: HTMLParagraphElement = document.querySelector(
 				`.pp${ind}-${i}`
-			);
+			)!;
 
-			let currentRating: number = +pNum.textContent;
+			let currentRating: number = +pNum.textContent!;
 			const initialR: number = answers[i].ratingToCompare;
 			if (initialR == currentRating || initialR === currentRating * -1) {
 				if (
@@ -182,9 +188,9 @@ export class Response {
 					pNum.innerHTML = `${currentRating - 1}`;
 				}
 				if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
-					answers[i].rating = +pNum.textContent * -1;
+					answers[i].rating = +pNum.textContent! * -1;
 				} else {
-					answers[i].rating = +pNum.textContent;
+					answers[i].rating = +pNum.textContent!;
 				}
 				localStorage.setItem('comments', JSON.stringify(comments));
 			}
