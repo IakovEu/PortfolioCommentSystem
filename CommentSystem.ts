@@ -99,6 +99,7 @@ showComs.addEventListener('click', (): void => {
 	btnList.setAttribute('how', 'idk');
 	removeMe ? removeMe.remove() : removeMe;
 	list.classList.remove('active');
+	tArea.updateComAmount();
 });
 
 // Сколько места занято в LS (в консоль)

@@ -4,32 +4,39 @@ export class Favorites {
 		const favs: NodeListOf<Element> = document.querySelectorAll('#favs');
 
 		favs.forEach((el) => {
-			el.addEventListener('click', function abc() {
-				const num: string =
-					el.parentElement!.parentElement!.parentElement!.getAttribute('num')!;
-				const respNum: string =
-					el.parentElement!.parentElement!.parentElement!.getAttribute(
-						'respnum'
-					)!;
+			const favListener: string = el.getAttribute('hasFavListener') ?? 'no';
+			if (favListener === 'no') {
+				el.setAttribute('hasFavListener', 'yes');
+				el.addEventListener('click', () => {
+					const num: string =
+						el.parentElement!.parentElement!.parentElement!.getAttribute(
+							'num'
+						)!;
+					const respNum: string =
+						el.parentElement!.parentElement!.parentElement!.getAttribute(
+							'respnum'
+						)!;
 
-				const favs: string[] = JSON.parse(localStorage.getItem('favorites')!) ?? [];
-				let result: string = '';
-				num ? (result = `num="${num}"`) : (result = `respnum="${respNum}"`);
+					const favs: string[] =
+						JSON.parse(localStorage.getItem('favorites')!) ?? [];
+					let result: string = '';
+					num ? (result = `num="${num}"`) : (result = `respnum="${respNum}"`);
 
-				if (el.childNodes[1].textContent === 'В избранное') {
-					el.innerHTML = `<img src="ImgForCommentSystem/filledHeart.svg" alt="*"><p>В избранном</p>`;
-					favs.push(result);
-					localStorage.setItem('favorites', JSON.stringify(favs));
-				} else {
-					el.innerHTML = `<img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p>`;
-					let newFavs: string[] = favs.filter((elem) => {
-						if (elem !== result) {
-							return elem;
-						}
-					});
-					localStorage.setItem('favorites', JSON.stringify(newFavs));
-				}
-			});
+					if (el.childNodes[1].textContent === 'В избранное') {
+						el.innerHTML = `<img src="ImgForCommentSystem/filledHeart.svg" alt="*"><p>В избранном</p>`;
+						favs.push(result);
+						localStorage.setItem('favorites', JSON.stringify(favs));
+					} else {
+						el.innerHTML = `<img src="ImgForCommentSystem/heart.svg" alt="*"><p>В избранное</p>`;
+						let newFavs: string[] = favs.filter((elem) => {
+							if (elem !== result) {
+								return elem;
+							}
+						});
+						localStorage.setItem('favorites', JSON.stringify(newFavs));
+					}
+				});
+			}
 		});
 	}
 	// Избранные при обновлении
@@ -56,6 +63,9 @@ export class Favorites {
 		const respAttr: string[] = [];
 		const comOnlyFavs: string[] = [];
 		const respOnlyFavs: string[] = [];
+		const amount: Element = document.querySelector('.comments__amount')!;
+
+		amount.innerHTML = `(${favs.length})`;
 
 		if (favs.length > 0) {
 			favs.forEach((el: string): void => {

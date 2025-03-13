@@ -161,7 +161,7 @@ export class Sorting {
 		} else if (nextHow === 'По актуальности') {
 			this.showListBtn.innerHTML = 'По актуальности';
 			alert('Все комментарии актуальны!');
-		} else {
+		} else { 
 			this.showListBtn.innerHTML = 'По количеству ответов';
 			const allResps: NodeListOf<Element> = document.querySelectorAll(
 				'.publishCom__answered'

@@ -166,33 +166,39 @@ export class Response {
 		i: number,
 		clr: string
 	): void {
-		const action: HTMLButtonElement = document.querySelector(`.${btn}`)!;
+		const allResps = document.querySelectorAll('.response__created');
 
-		action.addEventListener('click', (): void => {
-			const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
-			const answers: any[] = comments[ind].answers;
-			const pNum: HTMLParagraphElement = document.querySelector(
-				`.pp${ind}-${i}`
-			)!;
+		allResps.forEach((elem) => {
+			const respnum: string = elem.getAttribute('respnum')!;
 
-			let currentRating: number = +pNum.textContent!;
-			const initialR: number = answers[i].ratingToCompare;
-			if (initialR == currentRating || initialR === currentRating * -1) {
-				if (
-					window.getComputedStyle(pNum).color === clr ||
-					currentRating === 0
-				) {
-					pNum.style.color = `${clr}`;
-					pNum.innerHTML = `${currentRating + 1}`;
-				} else {
-					pNum.innerHTML = `${currentRating - 1}`;
-				}
-				if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
-					answers[i].rating = +pNum.textContent! * -1;
-				} else {
-					answers[i].rating = +pNum.textContent!;
-				}
-				localStorage.setItem('comments', JSON.stringify(comments));
+			if (respnum === `${ind}-${i}`) {
+				elem.querySelector(`.${btn}`)!.addEventListener('click', (): void => {
+					const comments: any[] = JSON.parse(localStorage.getItem('comments')!);
+					const answers: any[] = comments[ind].answers;
+					const pNum: HTMLParagraphElement = document.querySelector(
+						`.pp${ind}-${i}`
+					)!;
+
+					let currentRating: number = +pNum.textContent!;
+					const initialR: number = answers[i].ratingToCompare;
+					if (initialR == currentRating || initialR === currentRating * -1) {
+						if (
+							window.getComputedStyle(pNum).color === clr ||
+							currentRating === 0
+						) {
+							pNum.style.color = `${clr}`;
+							pNum.innerHTML = `${currentRating + 1}`;
+						} else {
+							pNum.innerHTML = `${currentRating - 1}`;
+						}
+						if (window.getComputedStyle(pNum).color === 'rgb(255, 0, 0)') {
+							answers[i].rating = +pNum.textContent! * -1;
+						} else {
+							answers[i].rating = +pNum.textContent!;
+						}
+						localStorage.setItem('comments', JSON.stringify(comments));
+					}
+				});
 			}
 		});
 	}
